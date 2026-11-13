@@ -29,7 +29,9 @@ Live site: <https://beartoinfinity-crypto.github.io/travel-eye/>
 | Exact dates | `2030.06.14` | `2030.06.✱✱` |
 | Date ranges | `06.14 – 06.21` | `06.✱✱ – 06.✱✱` |
 | Short dates | `06/14` | `06/✱✱` |
-| Email / phone | `me@example.com` | `✱✱✱@✱✱✱` |
+| Email / phone | `me@example.com` · `9876 5432` | `✱✱✱@✱✱✱` · `✱✱✱✱ ✱✱✱✱` |
+
+All examples above are fictional placeholders — never put real dates or flight numbers in this README.
 
 The month, year and weekday survive so the page still reads naturally; the exact day does not.
 
