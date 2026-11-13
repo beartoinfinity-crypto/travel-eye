@@ -1,5 +1,4 @@
 # Never upload the unmasked pages, even from a local CLI deploy.
-/index.html
-/sendai-2026.html
+/*.html
 /*.local.html
 /mask.local.json

@@ -337,6 +337,35 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .studio-note{font-size:9.5px;line-height:1.6;color:var(--ink-faint)}
 .studio-tools .studio-note{margin-left:auto}
 .studio-foot{margin-top:8px;font-size:9.5px;line-height:1.7;color:var(--ink-faint)}
+/* ---- publish to GitHub ---- */
+.publish{margin-top:13px;padding-top:11px;border-top:1px dashed rgba(92,64,51,.16)}
+.publish summary{
+  cursor:pointer;list-style:none;
+  font-family:var(--font-round);font-size:12px;font-weight:700;letter-spacing:.02em;
+  color:var(--ink-soft);display:flex;align-items:center;gap:6px;
+}
+.publish summary::-webkit-details-marker{display:none}
+.publish summary::before{
+  content:'＋';display:grid;place-items:center;
+  width:18px;height:18px;border-radius:50%;
+  border:1.5px dashed rgba(92,64,51,.3);
+  font-size:12px;line-height:1;color:var(--ink-faint);
+}
+.publish[open] summary::before{content:'−'}
+.publish-note{margin-top:7px;font-size:9.5px;line-height:1.75;color:var(--ink-faint)}
+.publish-field{display:grid;gap:4px;margin-top:9px}
+.publish-field label{font-size:9.5px;font-weight:700;letter-spacing:.06em;color:var(--ink-faint)}
+.publish-field input,.publish-field textarea{
+  width:100%;border:1.5px solid rgba(92,64,51,.18);background:#FFFDF7;
+  border-radius:9px;padding:7px 10px;font-size:11px;line-height:1.6;color:var(--ink);outline:none;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.publish-field textarea{min-height:52px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Noto Sans TC',monospace}
+.publish-field input:focus,.publish-field textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(232,152,154,.18)}
+.publish-check{display:flex;gap:7px;align-items:flex-start;margin-top:10px;font-size:9.5px;line-height:1.65;color:var(--ink-faint)}
+.publish-check input{margin-top:2px;accent-color:var(--matcha)}
+.publish .save-btn{margin-top:9px;background:var(--matcha-deep)}
+
 .code-status{
   margin-top:9px;padding:8px 11px;border-radius:0 8px 8px 0;
   font-size:11px;line-height:1.7;font-weight:700;
@@ -583,6 +612,25 @@ body.modal-open{overflow:hidden}
     </div>
     <button type="button" class="save-btn" id="saveHtml" disabled>儲存 HTML 並加入手帳</button>
     <p class="studio-foot">檔案會存到你選的位置，請存到 <strong>index.html</strong> 同一資料夾（或子資料夾），卡片才打得開。瀏覽器不支援另存視窗時，會改為下載到「下載」資料夾。</p>
+
+    <details class="publish" id="publishBox">
+      <summary>發布到網站（GitHub）</summary>
+      <p class="publish-note">沒有電腦專案資料夾時用這個：會先在這個分頁遮蔽日期、航班與你填的私人字詞，再直接寫入 <strong>docs/</strong>。需要一組只限 <strong>travel-eye</strong> 的 fine-grained token（Contents: Read and write）。Token 只留在這個分頁，不會儲存。</p>
+      <div class="publish-field">
+        <label for="ghToken">GitHub token</label>
+        <input id="ghToken" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+      </div>
+      <div class="publish-field">
+        <label for="extraTerms">額外遮蔽（每行一個，只留在這台裝置）</label>
+        <textarea id="extraTerms" spellcheck="false" placeholder="陳大文&#10;Hotel Gracery"></textarea>
+      </div>
+      <label class="publish-check">
+        <input type="checkbox" id="publishConfirm">
+        <span>我已確認：公開規則以外的私人資料（姓名、酒店、訂單編號）都已填入上面的額外遮蔽。</span>
+      </label>
+      <button type="button" class="save-btn" id="publishBtn" disabled>發布到網站</button>
+      <div class="code-status" id="publishStatus" role="status" aria-live="polite" hidden></div>
+    </details>
   </section>
 
   <footer class="home-foot">
@@ -745,6 +793,8 @@ body.modal-open{overflow:hidden}
   const STORE_KEY = 'travel.notebook.trips.v1';
   const THEMES = ['pink', 'matcha', 'tan'];
   const BUILTIN_TRIPS = [
+    /* >>> AUTO-TRIPS (managed by tools/publish.mjs; do not edit by hand) */
+    /* <<< AUTO-TRIPS */
     {
       id: 'tohoku-2026',
       title: '2026 東北 8日7夜',
@@ -765,6 +815,8 @@ body.modal-open{overflow:hidden}
 
   let customTrips = LS.get(STORE_KEY, []);
   if (!Array.isArray(customTrips)) customTrips = [];
+
+  let publishedTrips = [];
 
   function normalizeTrip(trip){
     if (!trip || typeof trip !== 'object') return null;
@@ -808,10 +860,23 @@ body.modal-open{overflow:hidden}
   }
 
   function sortedTrips(){
-    return BUILTIN_TRIPS.concat(customTrips).slice().sort((a, b) => {
+    const seen = Object.create(null);
+    const merged = [];
+    BUILTIN_TRIPS.concat(publishedTrips, customTrips).forEach(function(trip){
+      const key = String(trip.href || '').toLowerCase();
+      if (key && seen[key]) return;
+      if (key) seen[key] = true;
+      merged.push(trip);
+    });
+    return merged.sort(function(a, b){
       const da = a.start || '';
       const db = b.start || '';
-      if (da === db) return (a.custom ? 1 : 0) - (b.custom ? 1 : 0);
+      if (da === db) {
+        if (!da && a.added && b.added) return b.added - a.added;
+        return (a.custom ? 1 : 0) - (b.custom ? 1 : 0);
+      }
+      if (!da) return 1;
+      if (!db) return -1;
       return db.localeCompare(da);
     });
   }
@@ -1156,6 +1221,12 @@ body.modal-open{overflow:hidden}
   const codeStatus = $('#codeStatus');
   const codeFilename = $('#codeFilename');
   const saveHtmlBtn = $('#saveHtml');
+  const publishBtn = $('#publishBtn');
+  const publishStatus = $('#publishStatus');
+  const ghTokenInput = $('#ghToken');
+  const extraTermsBox = $('#extraTerms');
+  const publishConfirm = $('#publishConfirm');
+  const TERMS_KEY = 'travel.notebook.terms.v1';
 
   if (promptBox) {
     const savedPrompt = LS.get(PROMPT_KEY, null);
@@ -1321,11 +1392,13 @@ body.modal-open{overflow:hidden}
     if (parsed.state === 'empty') {
       codeStatus.hidden = true;
       saveHtmlBtn.disabled = true;
+      if (publishBtn) publishBtn.disabled = true;
       return;
     }
     if (parsed.state === 'bad') {
       setStatus('bad', parsed.message);
       saveHtmlBtn.disabled = true;
+      if (publishBtn) publishBtn.disabled = true;
       return;
     }
     const meta = parsed.meta;
@@ -1336,6 +1409,7 @@ body.modal-open{overflow:hidden}
       '已讀取：' + bits.join(' · ') + (meta.start ? '' : '（沒有 trip:start，卡片會顯示「旅程」）')
     );
     saveHtmlBtn.disabled = false;
+    if (publishBtn) publishBtn.disabled = false;
   }
 
   let pasteTimer = null;
@@ -1441,6 +1515,7 @@ body.modal-open{overflow:hidden}
       codeBox.value = '';
       codeFilename.value = '';
       saveHtmlBtn.disabled = true;
+      if (publishBtn) publishBtn.disabled = true;
 
       if (result.method === 'download') {
         setStatus('warn', 'HTML 已下載到「下載」資料夾。請把它移到 index.html 同一資料夾，卡片才打得開；卡片已先加入手帳。');
@@ -1458,7 +1533,260 @@ body.modal-open{overflow:hidden}
     });
   }
 
+  /* ================= 發布到 GitHub ================= */
+  const GH_REPO = 'beartoinfinity-crypto/travel-eye';
+  const GH_BRANCH = 'main';
+  const MASK_STAR = '✱✱✱';
+  const MASK_RULES = [
+    [/\b(UO|HX|CX|NH|JL|MM|GK|TR|BR|CI|KE|TG|SQ|MH|FD|SL|JX|IT|JQ|VA|QF|NZ|BA|AF|KL|LH|EK|QR|TK|UA|DL|AA)\s?([0-9]{2,4})\b/g, '$1 ✱✱✱'],
+    [/\b([0-9]{4})-([0-9]{2})-([0-9]{2})\b/g, '$1-$2-✱✱'],
+    [/\b([0-9]{4})\.([0-9]{2})\.([0-9]{2})\b/g, '$1.$2.✱✱'],
+    [/(?<![0-9.])([0-9]{2})\.([0-9]{2})(?![0-9])/g, '$1.✱✱'],
+    [/\b(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\b/g, '$1/✱✱'],
+    [/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '✱✱✱@✱✱✱'],
+    [/(?<![\d+])(?:\+852[\s-]?)?[4-9]\d{3}[\s-]\d{4}(?!\d)/g, '✱✱✱✱ ✱✱✱✱'],
+    [/\+\d{1,3}[\s-]?\d{6,12}/g, '✱✱✱✱ ✱✱✱✱']
+  ];
+
+  function escapeRe(text){
+    return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function maskClient(text, terms){
+    let out = String(text);
+    MASK_RULES.forEach(function(rule){ out = out.replace(rule[0], rule[1]); });
+    (terms || []).forEach(function(term){
+      if (!term) return;
+      out = out.replace(new RegExp(escapeRe(term), 'g'), MASK_STAR);
+    });
+    return out;
+  }
+
+  function toBase64(text){
+    const bytes = new TextEncoder().encode(text);
+    let binary = '';
+    const size = 0x8000;
+    for (let i = 0; i < bytes.length; i += size) {
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + size));
+    }
+    return btoa(binary);
+  }
+
+  function fromBase64(encoded){
+    const binary = atob(String(encoded || '').replace(/\s/g, ''));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  function encodePath(pathValue){
+    return String(pathValue).split('/').map(encodeURIComponent).join('/');
+  }
+
+  async function ghApi(pathValue, options, token){
+    const opts = options || {};
+    const response = await fetch('https://api.github.com/repos/' + GH_REPO + pathValue, {
+      method: opts.method || 'GET',
+      headers: Object.assign({
+        'Accept': 'application/vnd.github+json',
+        'Authorization': 'Bearer ' + token
+      }, opts.headers || {}),
+      body: opts.body
+    });
+    let data = null;
+    try { data = await response.json(); } catch (err) {}
+    if (!response.ok) {
+      const error = new Error((data && data.message) || ('HTTP ' + response.status));
+      error.status = response.status;
+      throw error;
+    }
+    return data;
+  }
+
+  async function ghPutFile(pathValue, content, message, token){
+    const encoded = encodePath(pathValue);
+    let sha = null;
+    try {
+      const current = await ghApi('/contents/' + encoded + '?ref=' + GH_BRANCH, {}, token);
+      sha = current && current.sha;
+    } catch (err) {
+      if (err.status !== 404) throw err;
+    }
+    const body = { message: message, content: toBase64(content), branch: GH_BRANCH };
+    if (sha) body.sha = sha;
+    await ghApi('/contents/' + encoded, { method: 'PUT', body: JSON.stringify(body) }, token);
+  }
+
+  function publicCard(meta, href, terms){
+    const start = meta.start ? maskClient(meta.start, terms) : '';
+    const end = meta.end ? maskClient(meta.end, terms) : start;
+    const days = meta.start ? calcDays(meta.start, meta.end || meta.start) : 1;
+    const destination = meta.destination || meta.title;
+    const slug = slugOf(href.replace(/\.html?$/i, ''));
+    return {
+      id: 'p-' + (slug || Date.now().toString(36)),
+      title: maskClient(meta.title, terms),
+      destination: maskClient(destination, terms),
+      ghost: maskClient(destination.replace(/[・\s]/g, '').slice(0, 2) || '旅', terms),
+      start: start,
+      end: end,
+      days: days,
+      nights: Math.max(days - 1, 0),
+      dateLabel: meta.start ? maskClient(formatRange(meta.start, meta.end || meta.start), terms) : '日期待定',
+      desc: maskClient(meta.desc || '我的新旅程，正在編寫中。', terms),
+      emoji: meta.emoji || '✈️',
+      theme: meta.theme,
+      href: href,
+      tags: ['自訂旅程'],
+      added: Date.now()
+    };
+  }
+
+  async function updateTripIndex(card, token){
+    let list = [];
+    let sha = null;
+    try {
+      const current = await ghApi('/contents/docs/trips.json?ref=' + GH_BRANCH, {}, token);
+      sha = current.sha;
+      const parsed = JSON.parse(fromBase64(current.content) || '[]');
+      if (Array.isArray(parsed)) list = parsed;
+    } catch (err) {
+      if (err.status !== 404) throw err;
+    }
+    list = list.filter(function(item){
+      return String((item && item.href) || '').toLowerCase() !== card.href.toLowerCase();
+    });
+    list.unshift(card);
+    const body = {
+      message: 'Register trip: ' + card.title,
+      content: toBase64(JSON.stringify(list, null, 2) + '\n'),
+      branch: GH_BRANCH
+    };
+    if (sha) body.sha = sha;
+    await ghApi('/contents/docs/trips.json', { method: 'PUT', body: JSON.stringify(body) }, token);
+  }
+
+  function setPublishStatus(kind, message){
+    if (!publishStatus) return;
+    publishStatus.hidden = false;
+    publishStatus.className = 'code-status' + (kind === 'ok' ? '' : ' is-' + kind);
+    publishStatus.textContent = message;
+  }
+
+  function safeHref(raw){
+    const href = normalizeHref(raw);
+    if (!href) return '';
+    if (href.indexOf('..') > -1 || href.charAt(0) === '/' || href.indexOf('\\') > -1) return '';
+    return href;
+  }
+
+  if (extraTermsBox) {
+    const savedTerms = LS.get(TERMS_KEY, '');
+    if (typeof savedTerms === 'string') extraTermsBox.value = savedTerms;
+    extraTermsBox.addEventListener('input', function(){ LS.set(TERMS_KEY, extraTermsBox.value); });
+  }
+
+  async function publishTrip(){
+    const parsed = readPasted(codeBox.value);
+    if (parsed.state !== 'ok') {
+      setPublishStatus('bad', parsed.message || '請先貼上完整的 HTML 檔。');
+      return;
+    }
+    const href = safeHref(codeFilename.value);
+    if (!href) {
+      setPublishStatus('bad', '檔名不合法：不要有 ..、開頭的 / 或反斜線。');
+      codeFilename.focus();
+      return;
+    }
+    const terms = String((extraTermsBox && extraTermsBox.value) || '')
+      .split(/\r?\n/).map(function(term){ return term.trim(); }).filter(Boolean);
+    if (maskClient(href, terms) !== href) {
+      setPublishStatus('bad', '檔名含有會被遮蔽的日期、航班或私人字詞，請改用不含這些資料的名稱。');
+      codeFilename.focus();
+      return;
+    }
+    const token = String((ghTokenInput && ghTokenInput.value) || '').trim();
+    if (!token) {
+      setPublishStatus('bad', '請先貼上 GitHub token。');
+      if (ghTokenInput) ghTokenInput.focus();
+      return;
+    }
+    if (!publishConfirm || !publishConfirm.checked) {
+      setPublishStatus('bad', '請先勾選「我已確認」再發布。');
+      return;
+    }
+
+    const masked = maskClient(codeBox.value, terms);
+    if (masked.indexOf('<html') === -1 || masked.indexOf('</html>') === -1) {
+      setPublishStatus('bad', '遮蔽後的內容不完整，請檢查貼上的 HTML。');
+      return;
+    }
+
+    const label = publishBtn.textContent;
+    publishBtn.disabled = true;
+    publishBtn.textContent = '發布中…';
+    setPublishStatus('warn', '正在上傳旅程頁面…');
+
+    try {
+      await ghPutFile('docs/' + href, masked, 'Publish trip: ' + parsed.meta.title, token);
+      setPublishStatus('warn', '頁面已上傳，正在更新旅程索引…');
+      const card = publicCard(parsed.meta, href, terms);
+      await updateTripIndex(card, token);
+
+      const trip = buildTripFromMeta(parsed.meta, href);
+      const existing = customTrips.find(function(item){ return item.href.toLowerCase() === href.toLowerCase(); });
+      if (existing) customTrips = customTrips.filter(function(item){ return item.id !== existing.id; });
+      customTrips.unshift(trip);
+      saveCustomTrips();
+      rememberName(parsed.meta.title, href);
+      render();
+
+      codeBox.value = '';
+      codeFilename.value = '';
+      saveHtmlBtn.disabled = true;
+      if (ghTokenInput) ghTokenInput.value = '';
+      if (publishConfirm) publishConfirm.checked = false;
+
+      const site = location.protocol === 'file:'
+        ? 'https://beartoinfinity-crypto.github.io/travel-eye/'
+        : location.href.replace(/[^/]*$/, '');
+      setPublishStatus('ok', '已發布「' + parsed.meta.title + '」。GitHub Pages 約 1 分鐘後更新：' + site + href);
+      showToast('旅程已發布到網站');
+    } catch (err) {
+      const hint = err.status === 401 ? '（token 無效或已過期）'
+        : err.status === 403 ? '（token 權限不足，需要 Contents: Read and write）'
+        : err.status === 409 ? '（檔案剛好被改動，請再按一次）'
+        : '';
+      setPublishStatus('bad', '發布失敗：' + err.message + hint);
+      publishBtn.disabled = false;
+    } finally {
+      publishBtn.textContent = label;
+    }
+  }
+
+  if (publishBtn) publishBtn.addEventListener('click', publishTrip);
+
+  function loadPublishedTrips(){
+    if (!window.fetch) return;
+    fetch('trips.json', { cache: 'no-store' })
+      .then(function(response){ return response.ok ? response.json() : null; })
+      .then(function(list){
+        if (!Array.isArray(list)) return;
+        publishedTrips = list.map(function(item){
+          const trip = normalizeTrip(item);
+          if (!trip) return null;
+          trip.custom = false;
+          trip.start = String(item.start || '');
+          trip.end = String(item.end || trip.start);
+          return trip;
+        }).filter(Boolean);
+        render();
+      })
+      .catch(function(){ /* file:// or no trips.json yet */ });
+  }
+
   render();
+  loadPublishedTrips();
   syncThemePills();
   syncEmojiChips();
 })();

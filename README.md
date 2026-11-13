@@ -12,9 +12,11 @@ For the developer handoff — layout, privacy model, deploy settings, known limi
 | --- | --- |
 | `index.html`, `sendai-2026.html` | **Your real pages** in the project root. Git-ignored — never pushed. |
 | `docs/` | The **masked** build that is published. This is what GitHub Pages serves. |
+| `docs/trips.json` | Cards published from the browser; the landing page fetches it. |
 | `tools/mask.mjs` | Builds `docs/` from the root pages and strips personal data. |
+| `tools/publish.mjs` | One command: add the card, mask, commit and push a trip. |
 | `mask.config.json` | Which patterns get masked, plus your own terms. |
-| `package.json` | `npm run mask` / `npm run check` / `npm run dev` |
+| `package.json` | `npm run mask` / `check` / `dev` / `publish` |
 | `vercel.json` | Tells Vercel to publish `docs/` (the repo root has no `index.html`). |
 
 > Everything in `docs/` is generated. Edit the root pages and re-run the build — never hand-edit `docs/`.
@@ -65,7 +67,7 @@ npm run mask      # rebuild docs/
 npm run check     # fails if docs/ is stale or still has raw dates / flight numbers / emails
 ```
 
-`npm run check` exits non-zero on any leak, so it is safe to wire into CI or a pre-push hook.
+`npm run check` exits non-zero on any leak, so it is safe to wire into CI or a pre-push hook. It also masks and leak-scans `docs/trips.json`, and no longer reports browser-published pages as orphans.
 
 ## Deploying
 
@@ -104,7 +106,9 @@ python -m http.server 8000
 At the bottom of `index.html`:
 
 1. **複製生成提示詞** — the box holds a ready prompt covering the style, structure and required meta tags. Replace the 【】 placeholders with your trip details and copy it into an AI chat.
-2. **貼上完成的 HTML** — paste the returned HTML. The page reads its metadata live, suggests a filename and saves the file, then adds the card.
+2. **貼上完成的 HTML** — paste the returned HTML. The page reads its metadata live and suggests a filename. Then either:
+   - **儲存 HTML 並加入手帳** — saves the file next to `index.html` and adds the card locally, or
+   - **發布到網站（GitHub）** — uploads the masked page and its card straight to `docs/` (see below).
 
 ### B. Register an existing file
 
@@ -135,6 +139,43 @@ Add an object to `BUILTIN_TRIPS` in `index.html`:
 
 `theme` is `pink`, `matcha` or `tan`.
 
+## Publishing a trip
+
+Both paths end the same way: a masked copy in `docs/`, a card in the landing page and a push. The raw page never leaves your machine.
+
+### From a terminal
+
+```powershell
+npm run publish -- kansai-2027.html
+```
+
+The command reads the page's `trip:*` meta tags, inserts or replaces its card in the `AUTO-TRIPS` block of `index.html`, runs the same masking as `npm run mask`, then commits `docs/kansai-2027.html` + `docs/index.html` and pushes. GitHub Pages is live about a minute later.
+
+Useful flags:
+
+```powershell
+npm run publish -- kansai-2027.html --dry-run   # show the card, write nothing
+npm run publish -- kansai-2027.html --no-push   # commit locally, push yourself
+```
+
+The page must sit in the project root and carry `<meta name="trip:title">`; the file itself stays git-ignored. The filename must not contain anything the masker redacts (dates, flight numbers, private terms) — the command rejects it, because the masked name would no longer match the card.
+
+### From the browser
+
+Use this when the trip was generated on a phone or a machine without the repo:
+
+1. Paste the HTML and pick a filename.
+2. Open **發布到網站（GitHub）**.
+3. Paste a **fine-grained personal access token** for this repo with **Contents: Read and write**.
+4. List any private terms to redact (names, hotels, booking references), one per line.
+5. Tick the confirmation and press **發布到網站**.
+
+The page masks in the browser with the same generic rules plus your extra terms, then writes `docs/<file>` and updates `docs/trips.json` through the GitHub API. The token is kept in the page only — never stored, never committed — and is cleared after a successful publish.
+
+> A token that can commit to the repo is powerful. Scope it to **this repository only**, give it the shortest expiry you can, and revoke it when you are done. Any script running on the same origin could read it while the tab is open.
+
+`docs/trips.json` is the committed index of cards published from the browser. The landing page fetches it and dedupes by `href`, so it can be published from anywhere. `npm run mask` re-masks the file, and `npm run check` fails if it still contains raw data.
+
 ## Trip page metadata
 
 For the landing page to auto-register a trip, the page should carry these tags:
@@ -149,7 +190,7 @@ For the landing page to auto-register a trip, the page should carry these tags:
 <meta name="trip:desc" content="櫻花、寺廟與咖啡店，慢慢行。">
 ```
 
-`trip:title` is the only required one (it falls back to `<title>`). Dates use `YYYY-MM-DD`.
+`trip:title` is the only required one. For `npm run publish`, include it explicitly; the landing workbench falls back to `<title>`. Dates use `YYYY-MM-DD`.
 
 Add a back link so the trip page can return:
 
@@ -164,6 +205,7 @@ Add a back link so the trip page can return:
 | `travel.notebook.trips.v1` | Trip cards added from the landing page |
 | `travel.notebook.prompt.v1` | Your edited generation prompt |
 | `travel.notebook.names.v1` | Trip name → filename memory |
+| `travel.notebook.terms.v1` | Extra redaction terms typed into the publish panel (this device only) |
 | `tohoku26.rates` / `.expenses` / `.checks` | Exchange rates, expenses and checklist |
 
 Clearing site data removes custom cards; the HTML files themselves are untouched.

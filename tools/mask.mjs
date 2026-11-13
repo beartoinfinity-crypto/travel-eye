@@ -18,6 +18,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
 const SRC = root;
 const OUT = path.join(root, 'docs');
+const INDEX = path.join(OUT, 'trips.json');
 const CONFIG = path.join(root, 'mask.config.json');
 const LOCAL = path.join(root, 'mask.local.json');
 
@@ -32,7 +33,7 @@ function readJson(file) {
   return JSON.parse(fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, ''));
 }
 
-function readConfig() {
+export function readConfig() {
   if (!fs.existsSync(CONFIG)) {
     console.error('Missing mask.config.json');
     process.exit(1);
@@ -65,7 +66,7 @@ function expand(template, groups) {
   });
 }
 
-function maskText(text, config) {
+export function maskText(text, config) {
   const counts = Object.create(null);
   const { output: protectedText, store } = protectSegments(text, config.protect);
   let output = protectedText;
@@ -136,6 +137,40 @@ function listHtml(dir) {
     .sort();
 }
 
+/** Pages published from the browser live only in docs/ and are listed in trips.json. */
+function readIndexHrefs() {
+  if (!fs.existsSync(INDEX)) return [];
+  try {
+    const list = JSON.parse(fs.readFileSync(INDEX, 'utf8').replace(/^\uFEFF/, ''));
+    if (!Array.isArray(list)) return [];
+    return list
+      .map((item) => String((item && item.href) || '').trim())
+      .filter((href) => href && href === path.basename(href) && /\.html?$/i.test(href));
+  } catch (error) {
+    console.error('\n! docs/trips.json is not valid JSON: ' + error.message);
+    process.exit(1);
+  }
+}
+
+function findLeaks(text) {
+  const found = [];
+  for (const leak of LEAK_PATTERNS) {
+    const hits = text.match(leak.pattern);
+    if (hits) found.push({ label: leak.label, samples: [...new Set(hits)].slice(0, 5) });
+  }
+  return found;
+}
+
+/** trips.json is committed too, so re-mask it and fail `--check` if it drifted. */
+function buildIndex(config) {
+  if (!fs.existsSync(INDEX)) return null;
+  const source = fs.readFileSync(INDEX, 'utf8');
+  const { output, counts, scan } = maskText(source, config);
+  const changed = output !== source;
+  if (!CHECK && changed) fs.writeFileSync(INDEX, output);
+  return { name: 'docs/trips.json', changed, counts, leftovers: findLeaks(scan), bytes: Buffer.byteLength(output) };
+}
+
 function build() {
   const config = readConfig();
   const files = listHtml(SRC);
@@ -158,22 +193,17 @@ function build() {
 
     if (!CHECK) fs.writeFileSync(target, output);
 
-    const leftovers = [];
-    for (const leak of LEAK_PATTERNS) {
-      const hits = scan.match(leak.pattern);
-      if (hits) leftovers.push({ label: leak.label, samples: [...new Set(hits)].slice(0, 5) });
-    }
-
-    report.push({ name, changed, counts, leftovers, bytes: Buffer.byteLength(output) });
+    report.push({ name, changed, counts, leftovers: findLeaks(scan), bytes: Buffer.byteLength(output) });
   }
 
-  // Anything left in docs/ that is not in src/ should be reported, not deleted silently.
-  const orphans = listHtml(OUT).filter((name) => !files.includes(name));
+  // Anything left in docs/ that is not in src/ or trips.json should be reported, not deleted silently.
+  const published = readIndexHrefs();
+  const orphans = listHtml(OUT).filter((name) => !files.includes(name) && !published.includes(name));
 
-  return { report, orphans };
+  return { report, index: buildIndex(config), orphans };
 }
 
-function printReport({ report, orphans }) {
+function printReport({ report, index, orphans }) {
   let total = 0;
   for (const file of report) {
     const entries = Object.entries(file.counts).sort((a, b) => b[1] - a[1]);
@@ -189,14 +219,27 @@ function printReport({ report, orphans }) {
     }
     if (CHECK && file.changed) console.log('  ! docs/ is out of date for this file');
   }
-  if (orphans.length) {
-    console.log(`\n! docs/ contains files that are not in src/: ${orphans.join(', ')}`);
+
+  if (index) {
+    const entries = Object.entries(index.counts).sort((a, b) => b[1] - a[1]);
+    total += entries.reduce((acc, [, n]) => acc + n, 0);
+    console.log(`\n${index.name}  (browser-published cards)`);
+    for (const [id, count] of entries) console.log(`  ${String(count).padStart(4)}  ${id}`);
+    for (const leak of index.leftovers) {
+      console.log(`  ! left over: ${leak.label} -> ${leak.samples.join(', ')}`);
+    }
+    if (CHECK && index.changed) console.log('  ! docs/trips.json still has unmasked values');
   }
-  console.log(`\n${total} value(s) masked across ${report.length} file(s).`);
+
+  if (orphans.length) {
+    console.log(`\n! docs/ contains files that are not in src/ or trips.json: ${orphans.join(', ')}`);
+  }
+  console.log(`\n${total} value(s) masked across ${report.length} file(s)${index ? ' plus docs/trips.json' : ''}.`);
 }
 
-function checkFailed({ report, orphans }) {
+function checkFailed({ report, index, orphans }) {
   if (orphans.length) return true;
+  if (index && (index.changed || index.leftovers.length)) return true;
   return report.some((file) => file.changed || file.leftovers.length);
 }
 
@@ -213,20 +256,24 @@ function run() {
   }
 }
 
-run();
+const invokedDirectly = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
-if (WATCH) {
-  console.log('\nWatching the project root for changes... (Ctrl+C to stop)');
-  let timer = null;
-  fs.watch(SRC, { recursive: false }, (event, filename) => {
-    if (!filename || !/\.html?$/i.test(filename)) return;
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      try {
-        run();
-      } catch (error) {
-        console.error(error.message);
-      }
-    }, 120);
-  });
+if (invokedDirectly) {
+  run();
+
+  if (WATCH) {
+    console.log('\nWatching the project root for changes... (Ctrl+C to stop)');
+    let timer = null;
+    fs.watch(SRC, { recursive: false }, (event, filename) => {
+      if (!filename || !/\.html?$/i.test(filename)) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        try {
+          run();
+        } catch (error) {
+          console.error(error.message);
+        }
+      }, 120);
+    });
+  }
 }
