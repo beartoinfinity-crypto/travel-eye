@@ -19,6 +19,7 @@ const root = path.resolve(here, '..');
 const SRC = root;
 const OUT = path.join(root, 'docs');
 const CONFIG = path.join(root, 'mask.config.json');
+const LOCAL = path.join(root, 'mask.local.json');
 
 const args = new Set(process.argv.slice(2));
 const CHECK = args.has('--check');
@@ -26,12 +27,26 @@ const WATCH = args.has('--watch');
 
 const REDACTED = '✱✱✱';
 
+/** JSON.parse that tolerates the BOM Windows editors like to add. */
+function readJson(file) {
+  return JSON.parse(fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, ''));
+}
+
 function readConfig() {
   if (!fs.existsSync(CONFIG)) {
     console.error('Missing mask.config.json');
     process.exit(1);
   }
-  const config = JSON.parse(fs.readFileSync(CONFIG, 'utf8'));
+  const config = readJson(CONFIG);
+
+  // mask.local.json is git-ignored: keep real names, hotels and booking refs here.
+  if (fs.existsSync(LOCAL)) {
+    const local = readJson(LOCAL);
+    for (const key of ['rules', 'terms', 'protect']) {
+      if (Array.isArray(local[key])) config[key] = [...(config[key] || []), ...local[key]];
+    }
+  }
+
   const rules = (config.rules || []).map((rule) => ({
     id: rule.id || rule.pattern,
     pattern: rule.pattern,

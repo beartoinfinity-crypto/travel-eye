@@ -33,14 +33,18 @@ Live site: <https://beartoinfinity-crypto.github.io/travel-eye/>
 
 The month, year and weekday survive so the page still reads naturally; the exact day does not.
 
-Add your own redactions to `mask.config.json`:
+**Private redactions belong in `mask.local.json`** — it is git-ignored, so real names never reach GitHub or Vercel:
 
 ```json
-"terms": [
-  { "find": "陳大文", "replace": "✱✱✱" },
-  { "find": "Hotel Gracery", "replace": "✱✱✱ 酒店" }
-]
+{
+  "terms": [
+    { "find": "陳大文", "replace": "✱✱✱" },
+    { "find": "Hotel Gracery", "replace": "✱✱✱ 酒店" }
+  ]
+}
 ```
+
+It is merged with `mask.config.json` at build time; `rules`, `terms` and `protect` all stack. Use `mask.config.json` only for generic, shareable rules.
 
 Fictional sample text can be protected from masking:
 
@@ -71,6 +75,13 @@ The published folder is **`docs/`**, because the real pages in the repo root are
 On Vercel, import the repo and leave the framework preset as **Other** — `vercel.json` already points it at `docs/`. If you ever see a 404 at `/`, the project is serving the repo root: check that `vercel.json` is committed and that the project's **Root Directory** is empty (not `docs`).
 
 Because `index.html` is not in Git, a Vercel deploy only ever contains masked content. `.vercelignore` also blocks the raw pages from a local `vercel` CLI upload.
+
+Or deploy from the command line:
+
+```powershell
+npx vercel login     # once
+npx vercel --prod    # reads vercel.json, uploads only docs/
+```
 
 ## Using the site
 

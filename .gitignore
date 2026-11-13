@@ -5,6 +5,9 @@
 # Anything else you drop in the root that is not meant to be public:
 /*.local.html
 
+# Your private mask terms (names, hotels, booking refs)
+/mask.local.json
+
 node_modules/
 .DS_Store
 Thumbs.db
