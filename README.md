@@ -13,6 +13,7 @@ Built as plain static HTML — no framework, no build tooling for the site itsel
 | `tools/mask.mjs` | Builds `docs/` from the root pages and strips personal data. |
 | `mask.config.json` | Which patterns get masked, plus your own terms. |
 | `package.json` | `npm run mask` / `npm run check` / `npm run dev` |
+| `vercel.json` | Tells Vercel to publish `docs/` (the repo root has no `index.html`). |
 
 > Everything in `docs/` is generated. Edit the root pages and re-run the build — never hand-edit `docs/`.
 
@@ -57,6 +58,19 @@ npm run check     # fails if docs/ is stale or still has raw dates / flight numb
 ```
 
 `npm run check` exits non-zero on any leak, so it is safe to wire into CI or a pre-push hook.
+
+## Deploying
+
+The published folder is **`docs/`**, because the real pages in the repo root are git-ignored. Two hosts are already set up for that:
+
+| Host | Config | URL |
+| --- | --- | --- |
+| GitHub Pages | `main` → `/docs` | <https://beartoinfinity-crypto.github.io/travel-eye/> |
+| Vercel | `vercel.json` → `"outputDirectory": "docs"` | your-project.vercel.app |
+
+On Vercel, import the repo and leave the framework preset as **Other** — `vercel.json` already points it at `docs/`. If you ever see a 404 at `/`, the project is serving the repo root: check that `vercel.json` is committed and that the project's **Root Directory** is empty (not `docs`).
+
+Because `index.html` is not in Git, a Vercel deploy only ever contains masked content. `.vercelignore` also blocks the raw pages from a local `vercel` CLI upload.
 
 ## Using the site
 
