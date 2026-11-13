@@ -2,13 +2,13 @@
 /**
  * Builds the publishable site.
  *
- *   src/   your real files (never committed - see .gitignore)
- *   docs/  the masked copy that gets pushed to GitHub
+ *   *.html   your real pages in the project root (git-ignored, never committed)
+ *   docs/    the masked copy that gets pushed to GitHub
  *
  * Usage:
- *   node tools/mask.mjs           rebuild docs/ from src/
+ *   node tools/mask.mjs           rebuild docs/ from the root pages
  *   node tools/mask.mjs --check   fail if docs/ is stale or still contains raw data
- *   node tools/mask.mjs --watch   rebuild whenever src/ changes
+ *   node tools/mask.mjs --watch   rebuild whenever a root page changes
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
-const SRC = path.join(root, 'src');
+const SRC = root;
 const OUT = path.join(root, 'docs');
 const CONFIG = path.join(root, 'mask.config.json');
 
@@ -126,7 +126,7 @@ function build() {
   const files = listHtml(SRC);
 
   if (!files.length) {
-    console.error('No HTML files found in src/. Put index.html (and any trip pages) there first.');
+    console.error('No HTML files found in the project root. Put index.html (and any trip pages) next to this folder.');
     process.exit(1);
   }
 
@@ -201,9 +201,10 @@ function run() {
 run();
 
 if (WATCH) {
-  console.log('\nWatching src/ for changes... (Ctrl+C to stop)');
+  console.log('\nWatching the project root for changes... (Ctrl+C to stop)');
   let timer = null;
-  fs.watch(SRC, { recursive: false }, () => {
+  fs.watch(SRC, { recursive: false }, (event, filename) => {
+    if (!filename || !/\.html?$/i.test(filename)) return;
     clearTimeout(timer);
     timer = setTimeout(() => {
       try {

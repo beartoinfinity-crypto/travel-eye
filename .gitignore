@@ -1,8 +1,10 @@
-# Your real, unmasked pages live in /src and are NEVER committed.
-# Only the masked build in /docs is published.
-/src/
+# Real, unmasked pages. NEVER commit these - only the masked build in /docs is published.
+/index.html
+/sendai-2026.html
+
+# Anything else you drop in the root that is not meant to be public:
+/*.local.html
 
 node_modules/
 .DS_Store
 Thumbs.db
-*.local.html

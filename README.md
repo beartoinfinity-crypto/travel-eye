@@ -8,17 +8,19 @@ Built as plain static HTML — no framework, no build tooling for the site itsel
 
 | Path | Purpose |
 | --- | --- |
-| `src/` | **Your real files.** Git-ignored — never pushed. Open `src/index.html` to use the site. |
+| `index.html`, `sendai-2026.html` | **Your real pages** in the project root. Git-ignored — never pushed. |
 | `docs/` | The **masked** build that is published. This is what GitHub Pages serves. |
-| `tools/mask.mjs` | Builds `docs/` from `src/` and strips personal data. |
+| `tools/mask.mjs` | Builds `docs/` from the root pages and strips personal data. |
 | `mask.config.json` | Which patterns get masked, plus your own terms. |
 | `package.json` | `npm run mask` / `npm run check` / `npm run dev` |
 
-> Everything in `docs/` is generated. Edit `src/` and re-run the build — never hand-edit `docs/`.
+> Everything in `docs/` is generated. Edit the root pages and re-run the build — never hand-edit `docs/`.
+
+Live site: <https://beartoinfinity-crypto.github.io/travel-eye/>
 
 ## Masking
 
-`npm run mask` copies `src/*.html` into `docs/*.html`, replacing:
+`npm run mask` copies `index.html` and `sendai-2026.html` into `docs/`, replacing:
 
 | Data | Example | Becomes |
 | --- | --- | --- |
@@ -58,7 +60,7 @@ npm run check     # fails if docs/ is stale or still has raw dates / flight numb
 
 ## Using the site
 
-Open `src/index.html` directly in a browser. All links are relative.
+Open `index.html` directly in a browser. All links are relative.
 
 Using a local server is optional:
 
@@ -70,18 +72,18 @@ python -m http.server 8000
 
 ### A. From the landing page (recommended)
 
-At the bottom of `src/index.html`:
+At the bottom of `index.html`:
 
 1. **複製生成提示詞** — the box holds a ready prompt covering the style, structure and required meta tags. Replace the 【】 placeholders with your trip details and copy it into an AI chat.
 2. **貼上完成的 HTML** — paste the returned HTML. The page reads its metadata live, suggests a filename and saves the file, then adds the card.
 
 ### B. Register an existing file
 
-Drop the HTML into `src/` and press「＋ 新增旅程」, then enter the filename.
+Drop the HTML next to `index.html` and press「＋ 新增旅程」, then enter the filename.
 
 ### C. Permanent entry
 
-Add an object to `BUILTIN_TRIPS` in `src/index.html`:
+Add an object to `BUILTIN_TRIPS` in `index.html`:
 
 ```js
 {
