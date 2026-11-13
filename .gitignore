@@ -1,0 +1,8 @@
+# Your real, unmasked pages live in /src and are NEVER committed.
+# Only the masked build in /docs is published.
+/src/
+
+node_modules/
+.DS_Store
+Thumbs.db
+*.local.html

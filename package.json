@@ -1,0 +1,12 @@
+{
+  "name": "travel-eye",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "旅行手帳 — a Japanese stationery-style travel notebook. One trip, one HTML page.",
+  "scripts": {
+    "mask": "node tools/mask.mjs",
+    "check": "node tools/mask.mjs --check",
+    "dev": "node tools/mask.mjs --watch"
+  }
+}

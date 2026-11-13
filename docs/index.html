@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FAF6EC">
+<title>旅行手帳｜我的旅程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF6EC;
+  --paper-2:#FFFDF7;
+  --ink:#5C4033;
+  --ink-soft:#7A6252;
+  --ink-faint:#A89484;
+  --pink:#E8989A;
+  --pink-deep:#C96669;
+  --pink-soft:#F6DCDC;
+  --matcha:#7A9A7E;
+  --matcha-deep:#5E7D62;
+  --matcha-soft:#E4EDE2;
+  --tan:#B08968;
+  --line:rgba(92,64,51,.14);
+  --font-round:'Zen Maru Gothic','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+  --font-sans:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+  --shadow:0 8px 22px rgba(92,64,51,.11);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font-family:var(--font-sans);
+  font-size:15px;
+  line-height:1.7;
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(rgba(92,64,51,.048) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(92,64,51,.048) 1px, transparent 1px);
+  background-size:24px 24px;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(232,152,154,.13), transparent 42%),
+    radial-gradient(circle at 92% 14%, rgba(122,154,126,.12), transparent 38%),
+    radial-gradient(circle at 50% 100%, rgba(176,137,104,.10), transparent 45%);
+}
+h1,h2,h3,h4,p,ul,ol{ margin:0; }
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{color:inherit;-webkit-tap-highlight-color:transparent}
+input,select,textarea{font:inherit;color:inherit}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.app{position:relative;z-index:1;max-width:720px;margin:0 auto;padding-bottom:24px}
+
+/* ============ 紙膠帶 ============ */
+.tape{
+  position:absolute;top:-9px;left:18px;width:92px;height:23px;z-index:5;
+  opacity:.82;mix-blend-mode:multiply;transform:rotate(-5deg);
+  clip-path:polygon(0 12%,4% 3%,96% 0,100% 10%,98% 88%,94% 100%,3% 94%,0 82%);
+  box-shadow:0 2px 4px rgba(92,64,51,.10);
+  pointer-events:none;
+}
+.tape-pink{background:repeating-linear-gradient(100deg,rgba(232,152,154,.78) 0 6px,rgba(250,226,226,.9) 6px 12px)}
+.tape-matcha{background:repeating-linear-gradient(100deg,rgba(122,154,126,.68) 0 6px,rgba(228,238,224,.92) 6px 12px)}
+.tape-tan{background:repeating-linear-gradient(100deg,rgba(176,137,104,.58) 0 6px,rgba(242,230,214,.92) 6px 12px);transform:rotate(4deg)}
+
+/* ============ 手帳封面 hero ============ */
+.hero{
+  position:relative;
+  margin:calc(16px + env(safe-area-inset-top)) 16px 0;
+  padding:20px 20px 20px;
+  border-radius:18px;
+  color:#FFF8EC;
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px) 0 0 / 20px 20px,
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px) 0 0 / 20px 20px,
+    linear-gradient(145deg,#5C4033,#493126);
+  box-shadow:0 14px 30px rgba(60,38,27,.25);
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:7px;border:1px solid rgba(255,249,239,.14);
+  border-radius:13px;pointer-events:none;
+}
+.hero-tape{top:2px;left:30px;width:100px;height:24px;z-index:6;opacity:.88}
+.hero-top{
+  position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-size:8.5px;font-weight:700;letter-spacing:.22em;color:rgba(255,249,239,.55);
+}
+.hero-heading{
+  position:relative;z-index:2;
+  display:inline-block;
+  margin-top:18px;padding:9px 14px 11px;
+  background:var(--paper-2);color:var(--ink);
+  border-radius:3px;transform:rotate(-1.2deg);
+  box-shadow:0 6px 16px rgba(0,0,0,.20);
+}
+.hero-kicker{display:block;font-size:8.5px;font-weight:700;letter-spacing:.18em;color:var(--ink-faint)}
+.hero-heading h1{
+  margin-top:2px;font-family:var(--font-round);
+  font-size:clamp(30px,9vw,38px);font-weight:900;line-height:1.1;letter-spacing:.02em;
+}
+.hero-sub{
+  position:relative;z-index:2;
+  margin-top:15px;font-size:12px;line-height:1.75;color:rgba(255,249,239,.72);
+  letter-spacing:.03em;max-width:19em;
+}
+.hero-stats{
+  position:relative;z-index:2;
+  display:flex;gap:22px;margin-top:18px;padding-top:13px;
+  border-top:1px dashed rgba(255,249,239,.18);
+}
+.hero-stats div{display:flex;flex-direction:column;gap:1px}
+.hero-stats strong{font-family:var(--font-round);font-size:19px;font-weight:900;line-height:1.1;color:#FFF8EC}
+.hero-stats span{font-size:9px;font-weight:700;letter-spacing:.12em;color:rgba(255,249,239,.50)}
+.hero-stamp{
+  position:absolute;right:18px;top:66px;z-index:3;
+  width:58px;height:58px;border-radius:50%;
+  display:grid;place-items:center;
+  border:2px solid rgba(232,152,154,.8);
+  color:#F0B1B3;font-family:var(--font-round);font-size:20px;font-weight:900;
+  transform:rotate(9deg);
+  box-shadow:inset 0 0 0 4px rgba(232,152,154,.08);
+}
+.hero-stamp::after{content:'';position:absolute;inset:5px;border:1px dashed currentColor;border-radius:50%;opacity:.5}
+.hero-year{
+  position:absolute;right:12px;bottom:-12px;z-index:1;
+  font-family:var(--font-round);font-size:72px;font-weight:900;line-height:1;
+  letter-spacing:-.04em;color:rgba(255,249,239,.06);pointer-events:none;
+}
+
+/* ============ 旅程一覽 ============ */
+.section-head{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+  padding:26px 20px 12px;
+}
+.section-kicker{font-size:9px;font-weight:700;letter-spacing:.24em;color:var(--ink-faint)}
+.section-head h2{
+  display:flex;align-items:center;gap:8px;margin-top:4px;
+  font-family:var(--font-round);font-size:23px;font-weight:900;line-height:1.3;
+}
+.count{
+  display:inline-grid;place-items:center;
+  min-width:26px;height:22px;padding:0 7px;
+  border-radius:99px;background:var(--pink-soft);color:var(--pink-deep);
+  font-family:var(--font-round);font-size:10.5px;font-weight:700;
+}
+.add-mini{
+  flex:0 0 auto;
+  border:1px dashed rgba(92,64,51,.30);background:rgba(255,253,247,.70);
+  border-radius:99px;padding:7px 13px;
+  font-family:var(--font-round);font-size:11.5px;font-weight:700;color:var(--ink-soft);
+}
+.add-mini:active{background:var(--pink-soft)}
+.trip-grid{display:grid;gap:18px;padding:0 16px}
+
+/* ============ 旅程卡 ============ */
+.trip-card{
+  position:relative;
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(92,64,51,.09);
+}
+.trip-tape{left:20px}
+.trip-cover{
+  position:relative;height:124px;padding:16px;overflow:hidden;
+  border-radius:15px 15px 0 0;
+  display:flex;align-items:flex-end;
+  color:inherit;text-decoration:none;
+}
+.trip-cover:focus-visible,.open-btn:focus-visible,.add-card:focus-visible,.add-mini:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+.trip-cover::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.28) 1px, transparent 1px);
+  background-size:22px 22px;opacity:.45;
+}
+.trip-cover::after{
+  content:'';position:absolute;right:-28px;top:-40px;
+  width:150px;height:150px;border-radius:50%;
+  background:rgba(255,255,255,.22);
+}
+.theme-pink .trip-cover{background:linear-gradient(135deg,#F9E3E2,#EFC9CA)}
+.theme-matcha .trip-cover{background:linear-gradient(135deg,#E8F0E4,#CDDDC8)}
+.theme-tan .trip-cover{background:linear-gradient(135deg,#F6EBDC,#E7D2B8)}
+.theme-pink .trip-status{color:#B85E60}
+.theme-matcha .trip-status{color:#5E7D62}
+.theme-tan .trip-status{color:#8C663F}
+.trip-route{
+  position:absolute;left:16px;top:15px;z-index:2;
+  font-size:8px;font-weight:700;letter-spacing:.18em;color:rgba(92,64,51,.55);
+}
+.trip-emoji{
+  position:relative;z-index:2;
+  font-size:46px;line-height:1;
+  filter:drop-shadow(0 3px 4px rgba(92,64,51,.15));
+}
+.trip-ghost{
+  position:absolute;right:10px;bottom:-13px;z-index:1;
+  font-family:var(--font-round);font-size:78px;font-weight:900;line-height:1;
+  letter-spacing:-.06em;color:rgba(255,255,255,.48);
+  white-space:nowrap;pointer-events:none;
+}
+.trip-status{
+  position:absolute;top:12px;right:12px;z-index:4;
+  width:52px;height:52px;border-radius:50%;
+  display:grid;place-items:center;
+  border:2px solid currentColor;
+  background:rgba(255,253,247,.38);
+  font-family:var(--font-round);font-size:11px;font-weight:900;letter-spacing:.04em;
+  transform:rotate(9deg);
+}
+.trip-status::after{content:'';position:absolute;inset:4px;border:1px dashed currentColor;border-radius:50%;opacity:.5}
+.trip-body{padding:14px 16px 15px}
+.trip-date{font-family:var(--font-round);font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--ink-faint)}
+.trip-body h3{margin:3px 0 1px;font-family:var(--font-round);font-size:19px;font-weight:900;line-height:1.45;letter-spacing:.01em}
+.trip-dest{font-size:11.5px;font-weight:700;color:var(--ink-soft)}
+.trip-desc{margin-top:7px;font-size:12px;line-height:1.75;color:var(--ink-soft)}
+.trip-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.trip-tag{
+  font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:99px;
+  background:rgba(250,246,236,.85);
+  border:1px dashed rgba(92,64,51,.16);color:var(--ink-faint);
+}
+.trip-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin-top:12px;padding-top:11px;
+  border-top:1px dashed rgba(92,64,51,.15);
+}
+.trip-foot-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.trip-meta{font-family:var(--font-round);font-size:10.5px;font-weight:700;color:var(--ink-soft);white-space:nowrap}
+.trip-del{
+  border:0;background:transparent;color:var(--ink-faint);
+  font-size:9.5px;font-weight:700;text-decoration:underline;
+  text-decoration-style:dashed;text-underline-offset:3px;
+  padding:0;
+}
+.trip-del:active{color:var(--pink-deep)}
+.open-btn{
+  flex:0 0 auto;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 13px;border-radius:9px;
+  background:var(--ink);color:#FFF9EF;text-decoration:none;
+  font-size:11.5px;font-weight:700;letter-spacing:.03em;
+  box-shadow:0 3px 0 rgba(92,64,51,.20);
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.open-btn span{font-size:11px;opacity:.7}
+.open-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(92,64,51,.20)}
+
+/* ============ 新增旅程卡 ============ */
+.add-card{
+  min-height:252px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  padding:24px;
+  border:2px dashed rgba(92,64,51,.22);
+  border-radius:16px;
+  background:rgba(255,253,247,.45);
+  color:var(--ink-soft);text-align:center;
+  transition:background .2s ease,transform .2s ease;
+}
+.add-card:active{background:var(--pink-soft);transform:scale(.99)}
+.add-plus{
+  width:48px;height:48px;margin-bottom:3px;border-radius:50%;
+  display:grid;place-items:center;
+  border:1.5px dashed rgba(92,64,51,.32);
+  font-family:var(--font-round);font-size:24px;font-weight:700;color:var(--ink);
+}
+.add-card strong{font-family:var(--font-round);font-size:14.5px;font-weight:900}
+.add-card small{font-size:10.5px;color:var(--ink-faint)}
+
+/* ============ 說明 / footer ============ */
+.howto{
+  position:relative;
+  margin:24px 16px 0;padding:18px 18px 16px;
+  background:rgba(255,253,247,.66);
+  border:1px dashed rgba(92,64,51,.22);
+  border-radius:16px;
+}
+.howto h3{display:flex;align-items:center;gap:6px;font-family:var(--font-round);font-size:14px;font-weight:900}
+.howto ol{margin:10px 0 0;padding-left:20px;display:grid;gap:4px;font-size:12px;line-height:1.8;color:var(--ink-soft)}
+.howto p{margin-top:10px;font-size:10.5px;line-height:1.75;color:var(--ink-faint)}
+
+/* ============ 新旅程工作台 ============ */
+.studio{
+  position:relative;
+  margin:12px 16px 0;padding:16px 16px 15px;
+  background:rgba(255,253,247,.78);
+  border:1px solid rgba(92,64,51,.14);
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(92,64,51,.07);
+}
+.tape-right{left:auto;right:20px;transform:rotate(4deg)}
+.step{display:flex;gap:9px;margin-bottom:10px}
+.step-no{
+  flex:0 0 auto;width:22px;height:22px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--ink);color:#FFF9EF;
+  font-family:var(--font-round);font-size:11px;font-weight:900;line-height:1;
+}
+.step-txt{padding-top:1px;min-width:0}
+.step-txt h3{font-family:var(--font-round);font-size:13.5px;font-weight:900;line-height:1.4}
+.step-txt p{margin-top:2px;font-size:10.5px;line-height:1.7;color:var(--ink-faint)}
+.prompt-box,.code-box{
+  width:100%;display:block;
+  border:1.5px dashed rgba(92,64,51,.24);border-radius:10px;
+  background:#FFFDF7;color:var(--ink-soft);
+  padding:11px 12px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Noto Sans TC',monospace;
+  font-size:11px;line-height:1.8;
+  resize:vertical;outline:none;
+}
+.prompt-box{height:188px;overflow-y:auto}
+.code-box{height:146px}
+.prompt-box:focus,.code-box:focus{
+  border-style:solid;border-color:var(--pink);background:#fff;
+  box-shadow:0 0 0 3px rgba(232,152,154,.16);
+}
+.studio-tools{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:wrap}
+.mini-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  border:1.5px dashed rgba(92,64,51,.28);border-radius:99px;
+  background:transparent;color:var(--ink-soft);
+  padding:6px 12px;font-size:11px;font-weight:700;
+}
+.mini-btn:active{background:var(--pink-soft)}
+.mini-btn:disabled{opacity:.45}
+.studio-note{font-size:9.5px;line-height:1.6;color:var(--ink-faint)}
+.studio-tools .studio-note{margin-left:auto}
+.studio-foot{margin-top:8px;font-size:9.5px;line-height:1.7;color:var(--ink-faint)}
+.code-status{
+  margin-top:9px;padding:8px 11px;border-radius:0 8px 8px 0;
+  font-size:11px;line-height:1.7;font-weight:700;
+  background:rgba(228,237,226,.65);color:var(--matcha-deep);
+  border-left:3px solid var(--matcha);
+}
+.code-status[hidden]{display:none}
+.code-status.is-bad{background:#FBE7E6;color:#A54F52;border-left-color:var(--pink-deep)}
+.code-status.is-warn{background:#FBF1DF;color:#8C663F;border-left-color:var(--tan)}
+.filename-row{display:flex;align-items:center;gap:8px;margin-top:10px}
+.filename-row label{
+  flex:0 0 auto;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--ink-faint);
+}
+.filename-row input{
+  flex:1;min-width:0;
+  border:1.5px solid rgba(92,64,51,.18);background:#FFFDF7;
+  border-radius:9px;padding:7px 10px;font-size:12px;color:var(--ink);outline:none;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.filename-row input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(232,152,154,.18)}
+.filename-row input::placeholder{color:#C4B4A5}
+.save-btn{
+  width:100%;margin-top:11px;border:0;border-radius:10px;
+  background:var(--ink);color:#FFF9EF;
+  font-family:var(--font-round);font-size:13px;font-weight:700;letter-spacing:.04em;
+  padding:12px;box-shadow:0 3px 0 rgba(92,64,51,.20);
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.save-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(92,64,51,.20)}
+.save-btn:disabled{opacity:.5;box-shadow:none;transform:none}
+.home-foot{
+  padding:24px 20px calc(26px + env(safe-area-inset-bottom));
+  text-align:center;font-size:9.5px;letter-spacing:.1em;color:var(--ink-faint);
+}
+.home-foot strong{font-weight:700;color:var(--ink-soft)}
+
+/* ============ 新增旅程 modal ============ */
+body.modal-open{overflow:hidden}
+.modal{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center}
+.modal[hidden]{display:none}
+.modal-backdrop{
+  position:absolute;inset:0;
+  background:rgba(50,33,24,.46);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+}
+.modal-sheet{
+  position:relative;
+  width:100%;max-width:560px;max-height:92vh;overflow-y:auto;
+  padding:20px 18px calc(20px + env(safe-area-inset-bottom));
+  background:var(--paper);
+  border-radius:20px 20px 0 0;
+  box-shadow:0 -12px 40px rgba(50,33,24,.25);
+  animation:sheetUp .3s cubic-bezier(.2,.7,.3,1) both;
+}
+@keyframes sheetUp{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:none}}
+.modal-handle{width:38px;height:4px;border-radius:99px;background:rgba(92,64,51,.18);margin:0 auto 14px}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.modal-kicker{font-size:8.5px;font-weight:700;letter-spacing:.2em;color:var(--ink-faint)}
+.modal-head h2{margin-top:3px;font-family:var(--font-round);font-size:21px;font-weight:900;line-height:1.35}
+.modal-x{
+  flex:0 0 auto;width:30px;height:30px;
+  border:1px dashed rgba(92,64,51,.25);border-radius:50%;
+  background:transparent;color:var(--ink-faint);
+  display:grid;place-items:center;font-size:12px;
+}
+.modal-x:active{background:var(--pink-soft)}
+.field{display:block;margin-bottom:11px}
+.field > span{display:block;margin-bottom:5px;font-size:10.5px;letter-spacing:.08em;color:var(--ink-faint);font-weight:700}
+.field input,.field textarea{
+  width:100%;min-width:0;
+  border:1.5px solid rgba(92,64,51,.18);background:#FFFDF7;
+  border-radius:9px;padding:9px 11px;
+  font-size:13.5px;color:var(--ink);outline:none;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.field input:focus,.field textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(232,152,154,.18)}
+.field input::placeholder{color:#C4B4A5}
+.field input[type=date]{font-size:12.5px}
+.field-hint{margin:-5px 0 11px;font-size:10px;line-height:1.65;color:var(--ink-faint)}
+.form-row.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.days-preview{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:2px 0 12px;padding:9px 12px;
+  background:rgba(250,246,236,.8);
+  border:1px dashed rgba(92,64,51,.18);border-radius:9px;
+}
+.days-preview span{font-size:10px;letter-spacing:.1em;color:var(--ink-faint);font-weight:700}
+.days-preview strong{font-family:var(--font-round);font-size:13px;font-weight:900}
+.days-preview strong.is-error{color:var(--pink-deep)}
+.emoji-field{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.emoji-field input{
+  width:66px;flex:0 0 auto;text-align:center;font-size:20px;padding:5px 6px;
+}
+.emoji-row{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+.emoji-chip{
+  width:30px;height:30px;
+  border:1px dashed rgba(92,64,51,.22);border-radius:8px;
+  background:#FFFDF7;font-size:15px;line-height:1;
+  display:grid;place-items:center;
+}
+.emoji-chip.is-on{border-style:solid;border-color:var(--pink);background:var(--pink-soft)}
+.theme-picker{display:flex;gap:7px;flex-wrap:wrap}
+.theme-opt{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1.5px solid rgba(92,64,51,.18);border-radius:99px;
+  background:#FFFDF7;padding:5px 10px;
+  font-size:11px;font-weight:700;color:var(--ink-soft);
+}
+.theme-opt input{position:absolute;width:1px;height:1px;opacity:0}
+.theme-opt.is-on{border-color:var(--ink);box-shadow:0 0 0 2px rgba(232,152,154,.18);color:var(--ink)}
+.theme-opt:focus-within{outline:2px solid var(--pink);outline-offset:2px}
+.swatch{width:13px;height:13px;border-radius:50%;border:1px solid rgba(92,64,51,.15)}
+.swatch-pink{background:var(--pink)}
+.swatch-matcha{background:var(--matcha)}
+.swatch-tan{background:var(--tan)}
+.form-error{
+  margin:4px 0 10px;padding:8px 11px;
+  background:#FBE7E6;color:#A54F52;
+  border-left:3px solid var(--pink-deep);border-radius:0 8px 8px 0;
+  font-size:11.5px;font-weight:700;line-height:1.6;
+}
+.form-error[hidden]{display:none}
+.modal-actions{display:flex;gap:9px;margin-top:6px}
+.modal-actions .ghost-btn{
+  flex:0 0 auto;border:1.5px dashed rgba(92,64,51,.28);background:transparent;
+  color:var(--ink-soft);font-size:12px;font-weight:700;
+  padding:10px 16px;border-radius:10px;
+}
+.modal-actions .primary-btn{
+  flex:1;border:0;border-radius:10px;
+  background:var(--ink);color:#FFF9EF;
+  font-family:var(--font-round);font-size:12.5px;font-weight:700;letter-spacing:.04em;
+  padding:11px;box-shadow:0 3px 0 rgba(92,64,51,.20);
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.modal-actions .primary-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(92,64,51,.20)}
+
+/* ============ toast ============ */
+.toast{
+  position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));z-index:120;
+  transform:translate(-50%,14px);opacity:0;pointer-events:none;
+  background:var(--ink);color:#FFF9EF;
+  font-size:11.5px;font-weight:700;letter-spacing:.02em;
+  padding:9px 16px;border-radius:99px;
+  box-shadow:0 8px 20px rgba(50,33,24,.25);
+  transition:opacity .24s ease,transform .24s ease;
+  max-width:calc(100% - 32px);text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (min-width:640px){
+  .hero{margin-left:24px;margin-right:24px;padding:24px 26px 22px}
+  .section-head{padding-left:24px;padding-right:24px}
+  .trip-grid{grid-template-columns:1fr 1fr;padding:0 24px}
+  .howto,.studio{margin-left:24px;margin-right:24px}
+  .modal{align-items:center;padding:24px}
+  .modal-sheet{border-radius:18px;max-height:88vh;padding-bottom:22px}
+}
+@media (max-width:360px){
+  .hero{padding:18px 16px 18px}
+  .hero-stamp{width:50px;height:50px;right:14px;top:62px;font-size:17px}
+  .hero-stats{gap:16px}
+  .trip-cover{height:116px}
+  .trip-ghost{font-size:68px}
+  .form-row.two{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <span class="tape tape-pink hero-tape" aria-hidden="true"></span>
+    <div class="hero-top"><span>MY TRAVEL NOTEBOOK</span><span>VOL. 01</span></div>
+    <div class="hero-heading">
+      <span class="hero-kicker">旅の記録</span>
+      <h1>旅行手帳</h1>
+    </div>
+    <p class="hero-sub">把每一趟旅程，收進同一本手帳。<br>打開卡片，就回到當時的風景。</p>
+    <div class="hero-stats">
+      <div><strong id="statTrips">1</strong><span>個旅程</span></div>
+      <div><strong id="statDays">8</strong><span>天在路上</span></div>
+      <div><strong>∞</strong><span>頁回憶</span></div>
+    </div>
+    <span class="hero-stamp" aria-hidden="true">旅</span>
+    <span class="hero-year" id="heroYear" aria-hidden="true"></span>
+  </header>
+
+  <div class="section-head">
+    <div>
+      <div class="section-kicker">TRAVEL FILES</div>
+      <h2>旅程一覽 <span class="count" id="tripCount">1</span></h2>
+    </div>
+    <button type="button" class="add-mini" id="addTripTop">＋ 新增旅程</button>
+  </div>
+
+  <main class="trip-grid" id="tripGrid"></main>
+
+  <section class="howto">
+    <span class="tape tape-matcha" aria-hidden="true"></span>
+    <h3>✎ 如何加入新旅程？</h3>
+    <ol>
+      <li>複製下面的生成提示詞，貼給 AI，並把【】內的行程資料改成你的。</li>
+      <li>把 AI 回傳的整段 HTML 複製起來。</li>
+      <li>貼到「② 貼上完成的 HTML」，按「儲存 HTML 並加入手帳」。</li>
+    </ol>
+    <p>首頁會自動讀取檔案裡的 <strong>trip:</strong> meta 標籤（名稱、日期、emoji），存檔後卡片立即出現。沒有 meta 也能用「＋ 新增旅程」手動登記；換裝置或清除瀏覽資料後，自訂卡片需要重新加入。</p>
+  </section>
+
+  <section class="studio">
+    <span class="tape tape-pink tape-right" aria-hidden="true"></span>
+    <div class="step">
+      <span class="step-no" aria-hidden="true">1</span>
+      <div class="step-txt">
+        <h3>複製生成提示詞</h3>
+        <p>直接在框內把【】換成你的行程，再整段複製給 ChatGPT／Claude／Gemini。</p>
+      </div>
+    </div>
+    <textarea class="prompt-box" id="promptBox" spellcheck="false" aria-label="生成新旅程 HTML 的提示詞"></textarea>
+    <div class="studio-tools">
+      <button type="button" class="mini-btn" id="copyPrompt">📋 複製提示詞</button>
+      <button type="button" class="mini-btn" id="resetPrompt">還原範本</button>
+      <span class="studio-note" id="promptState">可直接編輯</span>
+    </div>
+  </section>
+
+  <section class="studio">
+    <span class="tape tape-matcha tape-right" aria-hidden="true"></span>
+    <div class="step">
+      <span class="step-no" aria-hidden="true">2</span>
+      <div class="step-txt">
+        <h3>貼上完成的 HTML</h3>
+        <p>整段貼進來，會自動讀取旅程名稱、目的地、日期與封面 emoji。</p>
+      </div>
+    </div>
+    <textarea class="code-box" id="codeBox" spellcheck="false" autocomplete="off" placeholder="&lt;!DOCTYPE html&gt;&#10;&lt;html lang=&quot;zh-Hant&quot;&gt; …" aria-label="貼上旅程 HTML 原始碼"></textarea>
+    <div class="code-status" id="codeStatus" role="status" aria-live="polite" hidden></div>
+    <div class="filename-row">
+      <label for="codeFilename">檔名</label>
+      <input id="codeFilename" type="text" maxlength="120" autocomplete="off" placeholder="例如 kansai-2027.html">
+    </div>
+    <button type="button" class="save-btn" id="saveHtml" disabled>儲存 HTML 並加入手帳</button>
+    <p class="studio-foot">檔案會存到你選的位置，請存到 <strong>index.html</strong> 同一資料夾（或子資料夾），卡片才打得開。瀏覽器不支援另存視窗時，會改為下載到「下載」資料夾。</p>
+  </section>
+
+  <footer class="home-foot">
+    <strong>MY TRAVEL NOTEBOOK</strong><br>
+    一旅程，一頁手帳。
+  </footer>
+</div>
+
+<div class="modal" id="tripModal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-handle" aria-hidden="true"></div>
+    <div class="modal-head">
+      <div>
+        <div class="modal-kicker">NEW TRAVEL FILE</div>
+        <h2 id="modalTitle">新增旅程</h2>
+      </div>
+      <button type="button" class="modal-x" data-close aria-label="關閉">✕</button>
+    </div>
+
+    <form id="tripForm" autocomplete="off" novalidate>
+      <label class="field">
+        <span>旅程名稱 *</span>
+        <input id="tripTitle" type="text" maxlength="40" placeholder="例：2027 關西 5日4夜">
+      </label>
+      <label class="field">
+        <span>目的地 *</span>
+        <input id="tripDest" type="text" maxlength="30" placeholder="例：大阪・京都・奈良">
+      </label>
+      <div class="form-row two">
+        <label class="field">
+          <span>開始日期 *</span>
+          <input id="tripStart" type="date">
+        </label>
+        <label class="field">
+          <span>結束日期</span>
+          <input id="tripEnd" type="date">
+        </label>
+      </div>
+      <div class="days-preview">
+        <span>行程長度</span>
+        <strong id="daysPreview">—</strong>
+      </div>
+
+      <div class="field">
+        <span>封面 Emoji</span>
+        <div class="emoji-field">
+          <input id="tripEmoji" type="text" maxlength="8" value="✈️" aria-label="封面 Emoji">
+          <div class="emoji-row">
+            <button type="button" class="emoji-chip" data-emoji="⛩️" aria-label="鳥居">⛩️</button>
+            <button type="button" class="emoji-chip" data-emoji="⛰️" aria-label="山">⛰️</button>
+            <button type="button" class="emoji-chip" data-emoji="🌸" aria-label="花">🌸</button>
+            <button type="button" class="emoji-chip" data-emoji="🍜" aria-label="拉麵">🍜</button>
+            <button type="button" class="emoji-chip" data-emoji="🗼" aria-label="塔">🗼</button>
+            <button type="button" class="emoji-chip" data-emoji="🏝️" aria-label="小島">🏝️</button>
+            <button type="button" class="emoji-chip" data-emoji="🚄" aria-label="列車">🚄</button>
+            <button type="button" class="emoji-chip" data-emoji="🎡" aria-label="摩天輪">🎡</button>
+          </div>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>HTML 檔名 *</span>
+        <input id="tripFile" type="text" maxlength="120" placeholder="例：kansai-2027.html">
+      </label>
+      <p class="field-hint">與 index.html 放在同一資料夾；也可輸入子資料夾，例如 trips/kansai-2027.html。未填 .html 會自動補上。</p>
+
+      <div class="field">
+        <span>主題色</span>
+        <div class="theme-picker" id="themePicker">
+          <label class="theme-opt">
+            <input type="radio" name="tripTheme" value="pink" checked>
+            <span class="swatch swatch-pink" aria-hidden="true"></span>櫻花粉
+          </label>
+          <label class="theme-opt">
+            <input type="radio" name="tripTheme" value="matcha">
+            <span class="swatch swatch-matcha" aria-hidden="true"></span>抹茶綠
+          </label>
+          <label class="theme-opt">
+            <input type="radio" name="tripTheme" value="tan">
+            <span class="swatch swatch-tan" aria-hidden="true"></span>焦糖棕
+          </label>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>一句話簡介</span>
+        <input id="tripDesc" type="text" maxlength="80" placeholder="例：大阪・京都・奈良，邊行邊食。">
+      </label>
+
+      <div class="form-error" id="formError" role="alert" hidden></div>
+
+      <div class="modal-actions">
+        <button type="button" class="ghost-btn" data-close>取消</button>
+        <button type="submit" class="primary-btn">加入手帳</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ================= 工具 ================= */
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.prototype.slice.call((root || document).querySelectorAll(sel));
+  const LS = {
+    get(key, fallback){
+      try {
+        const raw = localStorage.getItem(key);
+        return raw === null ? fallback : JSON.parse(raw);
+      } catch (err) { return fallback; }
+    },
+    set(key, value){
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (err) {}
+    }
+  };
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const esc = (value) => String(value == null ? '' : value).replace(/[&<>"']/g, (m) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[m]));
+  const pad = (n) => (n < 10 ? '0' + n : String(n));
+
+  function startOfToday(){
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  function parseISO(value){
+    if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+    const d = new Date(value + 'T00:00:00');
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  function calcDays(start, end){
+    const s = parseISO(start);
+    const e = parseISO(end || start);
+    if (!s || !e || e < s) return 1;
+    return Math.round((e - s) / 86400000) + 1;
+  }
+
+  function fmtISO(value){
+    const d = parseISO(value);
+    if (!d) return '';
+    return d.getFullYear() + '.' + pad(d.getMonth() + 1) + '.' + pad(d.getDate());
+  }
+
+  function formatRange(start, end){
+    if (!parseISO(start)) return '';
+    if (!end || end === start) return fmtISO(start);
+    const sameYear = start.slice(0, 4) === end.slice(0, 4);
+    return fmtISO(start) + ' – ' + (sameYear ? end.slice(5).replace('-', '.') : fmtISO(end));
+  }
+
+  /* ================= 旅程資料 ================= */
+  const STORE_KEY = 'travel.notebook.trips.v1';
+  const THEMES = ['pink', 'matcha', 'tan'];
+  const BUILTIN_TRIPS = [
+    {
+      id: 'tohoku-2026',
+      title: '2026 東北 8日7夜',
+      destination: '仙台・青森',
+      ghost: '東北',
+      start: '2026-11-✱✱',
+      end: '2026-12-✱✱',
+      days: 8,
+      nights: 7,
+      dateLabel: '2026.11.✱✱ – 12.✱✱',
+      desc: '純公共交通，從仙台一路向北；牛舌、蘋果、睡魔燈籠與初冬雪景。',
+      emoji: '⛩️',
+      theme: 'pink',
+      href: 'sendai-2026.html',
+      tags: ['純公共交通', '新幹線', '雪景']
+    }
+  ];
+
+  let customTrips = LS.get(STORE_KEY, []);
+  if (!Array.isArray(customTrips)) customTrips = [];
+
+  function normalizeTrip(trip){
+    if (!trip || typeof trip !== 'object') return null;
+    const href = String(trip.href || '').trim();
+    if (!href || /^(javascript|data|vbscript):/i.test(href)) return null;
+    const title = String(trip.title || '').trim();
+    const destination = String(trip.destination || '').trim();
+    if (!title || !destination) return null;
+
+    const start = parseISO(trip.start) ? trip.start : '';
+    const end = parseISO(trip.end) ? trip.end : start;
+    const days = Math.max(1, parseInt(trip.days, 10) || calcDays(start, end));
+    const tags = Array.isArray(trip.tags) && trip.tags.length
+      ? trip.tags.slice(0, 3).map((tag) => String(tag))
+      : ['自訂旅程'];
+
+    return {
+      id: String(trip.id || ('c-' + uid())),
+      custom: true,
+      title: title,
+      destination: destination,
+      ghost: String(trip.ghost || destination.replace(/[・\s]/g, '').slice(0, 2) || '旅'),
+      start: start,
+      end: end,
+      days: days,
+      nights: Math.max(days - 1, 0),
+      dateLabel: String(trip.dateLabel || formatRange(start, end)),
+      desc: String(trip.desc || '我的新旅程，正在編寫中。'),
+      emoji: String(trip.emoji || '✈️'),
+      theme: THEMES.indexOf(trip.theme) > -1 ? trip.theme : 'pink',
+      href: href,
+      tags: tags
+    };
+  }
+
+  customTrips = customTrips.map(normalizeTrip).filter(Boolean);
+  LS.set(STORE_KEY, customTrips);
+
+  function saveCustomTrips(){
+    LS.set(STORE_KEY, customTrips);
+  }
+
+  function sortedTrips(){
+    return BUILTIN_TRIPS.concat(customTrips).slice().sort((a, b) => {
+      const da = a.start || '';
+      const db = b.start || '';
+      if (da === db) return (a.custom ? 1 : 0) - (b.custom ? 1 : 0);
+      return db.localeCompare(da);
+    });
+  }
+
+  function statusOf(trip){
+    const today = startOfToday();
+    const start = parseISO(trip.start);
+    const end = parseISO(trip.end) || start;
+    if (!start) return { label: '旅程', cls: 'now' };
+    if (today < start) return { label: '預定', cls: 'upcoming' };
+    if (end && today > end) return { label: '回憶', cls: 'past' };
+    return { label: '旅途中', cls: 'now' };
+  }
+
+  /* ================= 渲染 ================= */
+  const tripGrid = $('#tripGrid');
+  const tripCountEl = $('#tripCount');
+  const statTripsEl = $('#statTrips');
+  const statDaysEl = $('#statDays');
+
+  function tripCardHTML(trip){
+    const status = statusOf(trip);
+    const theme = THEMES.indexOf(trip.theme) > -1 ? trip.theme : 'pink';
+    const tapeClass = { pink: 'tape-pink', matcha: 'tape-matcha', tan: 'tape-tan' }[theme];
+    const ghost = trip.ghost || trip.destination.replace(/[・\s]/g, '').slice(0, 2) || '旅';
+    const year = trip.start ? trip.start.slice(0, 4) : 'NOTE';
+    const tags = (trip.tags || []).map((tag) => '<span class="trip-tag">' + esc(tag) + '</span>').join('');
+
+    return '' +
+      '<article class="trip-card theme-' + theme + '" data-trip-id="' + esc(trip.id) + '">' +
+        '<span class="tape ' + tapeClass + ' trip-tape" aria-hidden="true"></span>' +
+        '<a class="trip-cover" href="' + esc(trip.href) + '" aria-label="打開旅程：' + esc(trip.title) + '">' +
+          '<span class="trip-route">TRAVEL FILE ・ ' + esc(year) + '</span>' +
+          '<span class="trip-emoji" aria-hidden="true">' + esc(trip.emoji) + '</span>' +
+          '<span class="trip-ghost" aria-hidden="true">' + esc(ghost) + '</span>' +
+          '<span class="trip-status ' + status.cls + '">' + status.label + '</span>' +
+        '</a>' +
+        '<div class="trip-body">' +
+          '<div class="trip-date">' + esc(trip.dateLabel) + '</div>' +
+          '<h3>' + esc(trip.title) + '</h3>' +
+          '<div class="trip-dest">📍 ' + esc(trip.destination) + '</div>' +
+          '<p class="trip-desc">' + esc(trip.desc) + '</p>' +
+          (tags ? '<div class="trip-tags">' + tags + '</div>' : '') +
+          '<div class="trip-foot">' +
+            '<div class="trip-foot-left">' +
+              '<span class="trip-meta">' + trip.days + ' 天 ' + trip.nights + ' 夜</span>' +
+              (trip.custom ? '<button type="button" class="trip-del" data-del="' + esc(trip.id) + '">移除</button>' : '') +
+            '</div>' +
+            '<a class="open-btn" href="' + esc(trip.href) + '">打開手帳 <span aria-hidden="true">→</span></a>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+  }
+
+  function render(){
+    const trips = sortedTrips();
+    tripGrid.innerHTML = trips.map(tripCardHTML).join('') +
+      '<button type="button" class="add-card" id="addTripCard">' +
+        '<span class="add-plus" aria-hidden="true">＋</span>' +
+        '<strong>新增旅程</strong>' +
+        '<small>放入 HTML 後，在這裡登記</small>' +
+      '</button>';
+
+    tripCountEl.textContent = String(trips.length);
+    statTripsEl.textContent = String(trips.length);
+    statDaysEl.textContent = String(trips.reduce((sum, trip) => sum + (Number(trip.days) || 0), 0));
+
+    const years = trips
+      .map((trip) => parseInt((trip.start || '').slice(0, 4), 10))
+      .filter((year) => isFinite(year));
+    const thisYear = new Date().getFullYear();
+    const displayYear = years.length ? Math.max(thisYear, Math.max.apply(null, years)) : thisYear;
+    $('#heroYear').textContent = String(displayYear);
+  }
+
+  /* ================= modal ================= */
+  const modal = $('#tripModal');
+  const tripForm = $('#tripForm');
+  const tripTitle = $('#tripTitle');
+  const tripDest = $('#tripDest');
+  const tripStart = $('#tripStart');
+  const tripEnd = $('#tripEnd');
+  const tripFile = $('#tripFile');
+  const tripEmoji = $('#tripEmoji');
+  const tripDesc = $('#tripDesc');
+  const daysPreview = $('#daysPreview');
+  const formError = $('#formError');
+  const toastEl = $('#toast');
+  let lastTrigger = null;
+  let toastTimer = null;
+
+  function showToast(message){
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => {
+      toastEl.classList.remove('show');
+    }, 2300);
+  }
+
+  function showError(message){
+    formError.textContent = message;
+    formError.hidden = false;
+  }
+
+  function hideError(){
+    formError.hidden = true;
+    formError.textContent = '';
+  }
+
+  function syncThemePills(){
+    $$('.theme-opt').forEach((label) => {
+      const input = $('input[type="radio"]', label);
+      label.classList.toggle('is-on', !!(input && input.checked));
+    });
+  }
+
+  function syncEmojiChips(){
+    const value = tripEmoji.value.trim();
+    $$('.emoji-chip').forEach((chip) => {
+      chip.classList.toggle('is-on', chip.dataset.emoji === value);
+    });
+  }
+
+  function updateDaysPreview(){
+    daysPreview.classList.remove('is-error');
+    if (!tripStart.value) {
+      daysPreview.textContent = '—';
+      return;
+    }
+    if (tripEnd.value && tripEnd.value < tripStart.value) {
+      daysPreview.textContent = '日期有誤';
+      daysPreview.classList.add('is-error');
+      return;
+    }
+    const days = calcDays(tripStart.value, tripEnd.value || tripStart.value);
+    daysPreview.textContent = days + ' 天 ' + Math.max(days - 1, 0) + ' 夜';
+  }
+
+  function openModal(trigger){
+    lastTrigger = trigger || document.activeElement;
+    tripForm.reset();
+    syncThemePills();
+    syncEmojiChips();
+    hideError();
+    updateDaysPreview();
+    modal.hidden = false;
+    document.body.classList.add('modal-open');
+    window.setTimeout(() => tripTitle.focus(), 80);
+  }
+
+  function closeModal(){
+    modal.hidden = true;
+    document.body.classList.remove('modal-open');
+    if (lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus();
+  }
+
+  function focusablesInModal(){
+    return $$('button, input, [href]', modal).filter((el) =>
+      !el.disabled && el.offsetParent !== null
+    );
+  }
+
+  $('#addTripTop').addEventListener('click', (event) => openModal(event.currentTarget));
+
+  tripGrid.addEventListener('click', (event) => {
+    if (event.target.closest('#addTripCard')) {
+      openModal(event.target.closest('#addTripCard'));
+      return;
+    }
+
+    const delBtn = event.target.closest('[data-del]');
+    if (!delBtn) return;
+    const trip = customTrips.find((item) => item.id === delBtn.dataset.del);
+    if (!trip) return;
+    const ok = window.confirm('移除「' + trip.title + '」？\n只會移除首頁卡片，不會刪除 HTML 檔案。');
+    if (!ok) return;
+    customTrips = customTrips.filter((item) => item.id !== trip.id);
+    saveCustomTrips();
+    render();
+    showToast('已從手帳移除');
+  });
+
+  $$('[data-close]').forEach((el) => {
+    el.addEventListener('click', closeModal);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !modal.hidden) {
+      closeModal();
+      return;
+    }
+    if (event.key !== 'Tab' || modal.hidden) return;
+
+    const items = focusablesInModal();
+    if (!items.length) return;
+    const first = items[0];
+    const last = items[items.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  $$('input[name="tripTheme"]').forEach((input) => {
+    input.addEventListener('change', syncThemePills);
+  });
+
+  tripEmoji.addEventListener('input', syncEmojiChips);
+  $$('.emoji-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      tripEmoji.value = chip.dataset.emoji || '✈️';
+      syncEmojiChips();
+    });
+  });
+
+  tripStart.addEventListener('input', updateDaysPreview);
+  tripEnd.addEventListener('input', updateDaysPreview);
+
+  [tripTitle, tripDest, tripStart, tripEnd, tripFile].forEach((field) => {
+    field.addEventListener('input', hideError);
+  });
+
+  function normalizeHref(raw){
+    let value = String(raw || '').trim().replace(/^["']|["']$/g, '');
+    if (!value) return '';
+    if (/^(javascript|data|vbscript):/i.test(value)) return '';
+    if (!/\.html?$/i.test(value)) value += '.html';
+    return value;
+  }
+
+  tripForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    hideError();
+
+    const title = tripTitle.value.trim();
+    const destination = tripDest.value.trim();
+    const start = tripStart.value;
+    const end = tripEnd.value || start;
+    const href = normalizeHref(tripFile.value);
+
+    if (!title || !destination || !start) {
+      showError('請填寫旅程名稱、目的地與開始日期。');
+      return;
+    }
+    if (end < start) {
+      showError('結束日期不可早於開始日期。');
+      return;
+    }
+    if (!href) {
+      showError('請填寫有效的 HTML 檔名，例如 kansai-2027.html。');
+      return;
+    }
+
+    const themeInput = $('input[name="tripTheme"]:checked');
+    const days = calcDays(start, end);
+    const trip = {
+      id: 'c-' + uid(),
+      custom: true,
+      title: title,
+      destination: destination,
+      ghost: destination.replace(/[・\s]/g, '').slice(0, 2) || '旅',
+      start: start,
+      end: end,
+      days: days,
+      nights: Math.max(days - 1, 0),
+      dateLabel: formatRange(start, end),
+      desc: tripDesc.value.trim() || '我的新旅程，正在編寫中。',
+      emoji: tripEmoji.value.trim() || '✈️',
+      theme: themeInput ? themeInput.value : 'pink',
+      href: href,
+      tags: ['自訂旅程']
+    };
+
+    customTrips.unshift(trip);
+    saveCustomTrips();
+    closeModal();
+    render();
+    showToast('旅程已加入手帳');
+
+    window.setTimeout(() => {
+      const card = document.querySelector('[data-trip-id="' + trip.id + '"]');
+      if (!card) return;
+      try { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      catch (err) { card.scrollIntoView(); }
+    }, 100);
+  });
+
+  /* ================= 新旅程工作台 ================= */
+  const PROMPT_KEY = 'travel.notebook.prompt.v1';
+  const NAMES_KEY = 'travel.notebook.names.v1';
+  const PROMPT_TEMPLATE = [
+    '你是擅長「日系手帳／紙膠帶拼貼」風格的網頁設計師。請替我做一個單一 HTML 檔的旅行行程頁，要和我現有的「旅行手帳」系列用同一套視覺語言。',
+    '',
+    '【這次的行程資料】（把【】內換成真實內容；未填的請先問我，不要自己編造）',
+    '- 旅程名稱：【2027 關西 6日5夜】',
+    '- 目的地：【大阪・京都・奈良】',
+    '- 出發日期：【2027-04-01】',
+    '- 回程日期：【2027-04-06】，共【6】天【5】夜',
+    '- 同行：【2 人】',
+    '- 住宿：【2 晚京都 + 3 晚大阪，難波一帶】',
+    '- 航班／主要交通：【香港→關西 UO850 09:00-13:30；回程 UO851 14:30-18:05】',
+    '- 想去的地方：【清水寺、伏見稻荷大社、錦市場、奈良公園、黑門市場】',
+    '- 想吃：【串炸、湯豆腐、抹茶甜品、釜飯】',
+    '- 特別要求：【長輩同行，每天最多 3 個景點，午飯要坐低食】',
+    '',
+    '【技術要求】',
+    '1. 只輸出一個完整 HTML 檔，由 <!DOCTYPE html> 到 </html>；不要解釋、不要分段、不要用 Markdown code fence。',
+    '2. CSS 與 JavaScript 全部內嵌；除 Google Fonts 外不要任何外部檔案或 CDN。',
+    '3. 字體：Noto Sans TC（正文）＋ Zen Maru Gothic（標題），附系統中文字體 fallback。',
+    '4. 手機優先，以 390px 設計；任何寬度都不可橫向捲動；桌面上 max-width 720px 居中。',
+    '5. 底部固定導覽有三個分頁（切換時各自保留內容）：',
+    '   - 每日行程：sticky 的 Day 1–N 橫向分頁，切換要平滑',
+    '   - 匯率與記帳：日圓→台幣／港幣即時換算、可改匯率、可新增與刪除消費，資料存 localStorage',
+    '   - 行前清單：可勾選、可新增自訂項目、可重設，資料存 localStorage',
+    '6. 每個景點一張卡，要有：時間、分類標籤（交通／美食／景點／購物／住宿）、地點名稱、一句實用說明、以及「Google Maps 導航」按鈕，網址用 https://www.google.com/maps/search/?api=1&query= 加上 encodeURIComponent 的地點名稱。',
+    '7. 頂部一張「票根」造型標題卡：天數、目的地、日期、條碼裝飾、圓形印章（用目的地簡稱，例如「關西」）。',
+    '8. 頁面左上角要有返回首頁的連結：<a class="trip-back" href="index.html">← 旅程手帳</a>，三個分頁都要有。',
+    '9. 沿用以下設計 token 與質感：',
+    '   --paper:#FAF6EC；--ink:#5C4033；--pink:#E8989A；--matcha:#7A9A7E；--tan:#B08968',
+    '   背景是 24px 淡褐色方格紙；卡片用半透明斜紋紙膠帶（mix-blend-mode:multiply）＋虛線邊框；印章是圓形、內圈虛線、微微旋轉；行高 1.7、字距偏鬆。',
+    '10. 在 <head> 加入以下 meta，讓我的手帳首頁自動登記這個旅程（內容依上面資料填，theme 三選一：pink／matcha／tan）：',
+    '<meta name="trip:title" content="2027 關西 6日5夜">',
+    '<meta name="trip:destination" content="大阪・京都・奈良">',
+    '<meta name="trip:start" content="2027-04-01">',
+    '<meta name="trip:end" content="2027-04-06">',
+    '<meta name="trip:emoji" content="⛩️">',
+    '<meta name="trip:theme" content="matcha">',
+    '<meta name="trip:desc" content="櫻花、寺廟與咖啡店，慢慢行。">',
+    '11. 內文用繁體中文。行程要務實：包含交通與用餐時間，一天不要排超過 4 個點，保留緩衝。',
+    '12. 地點要用真實存在的地名；不確定的營業時間、票價、班次請留白或標明「出發前確認」，不要編造。'
+  ].join('\n');
+
+  const promptBox = $('#promptBox');
+  const promptState = $('#promptState');
+  const codeBox = $('#codeBox');
+  const codeStatus = $('#codeStatus');
+  const codeFilename = $('#codeFilename');
+  const saveHtmlBtn = $('#saveHtml');
+
+  if (promptBox) {
+    const savedPrompt = LS.get(PROMPT_KEY, null);
+    promptBox.value = (typeof savedPrompt === 'string' && savedPrompt.trim()) ? savedPrompt : PROMPT_TEMPLATE;
+  }
+
+  function copyText(text){
+    if (legacyCopy(text)) return Promise.resolve(true);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function(){ return true; }, function(){ return false; });
+    }
+    return Promise.resolve(false);
+  }
+
+  function legacyCopy(text){
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      const ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
+    } catch (err) { return false; }
+  }
+
+  if ($('#copyPrompt')) {
+    $('#copyPrompt').addEventListener('click', function(){
+      copyText(promptBox.value).then(function(ok){
+        if (ok) {
+          showToast('提示詞已複製，貼給 AI 就可以');
+          return;
+        }
+        promptBox.focus();
+        promptBox.select();
+        try { promptBox.setSelectionRange(0, promptBox.value.length); } catch (err) {}
+        showToast('已選取提示詞，請按 Ctrl / ⌘ + C 複製');
+      });
+    });
+  }
+
+  if ($('#resetPrompt')) {
+    $('#resetPrompt').addEventListener('click', function(){
+      promptBox.value = PROMPT_TEMPLATE;
+      LS.set(PROMPT_KEY, PROMPT_TEMPLATE);
+      promptState.textContent = '已還原範本';
+      showToast('已還原提示詞範本');
+    });
+  }
+
+  let promptTimer = null;
+  if (promptBox) {
+    promptBox.addEventListener('input', function(){
+      promptState.textContent = '已記住修改';
+      window.clearTimeout(promptTimer);
+      promptTimer = window.setTimeout(function(){ LS.set(PROMPT_KEY, promptBox.value); }, 400);
+    });
+  }
+
+  /* ---------- 解析貼上的 HTML ---------- */
+  function parseTripHtml(source){
+    const doc = new DOMParser().parseFromString(source, 'text/html');
+    const pick = function(name){
+      const el = doc.querySelector('meta[name="' + name + '"]');
+      return el ? String(el.getAttribute('content') || '').trim() : '';
+    };
+    let title = pick('trip:title');
+    if (!title) {
+      title = String(doc.title || '').trim().split(/[｜|]/)[0].trim();
+    }
+    const start = parseISO(pick('trip:start')) ? pick('trip:start') : '';
+    const endRaw = pick('trip:end');
+    const theme = pick('trip:theme');
+    return {
+      title: title,
+      destination: pick('trip:destination'),
+      start: start,
+      end: parseISO(endRaw) ? endRaw : start,
+      emoji: pick('trip:emoji') || '✈️',
+      theme: THEMES.indexOf(theme) > -1 ? theme : 'pink',
+      desc: pick('trip:desc')
+    };
+  }
+
+  function basenameOf(path){
+    return String(path).split(/[\\/]/).pop().replace(/[?#].*$/, '');
+  }
+
+  function slugOf(text){
+    return String(text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  let knownNames = LS.get(NAMES_KEY, {});
+  if (!knownNames || typeof knownNames !== 'object' || Array.isArray(knownNames)) knownNames = {};
+
+  function rememberName(title, href){
+    knownNames[title] = href;
+    const keys = Object.keys(knownNames);
+    if (keys.length > 60) {
+      keys.slice(0, keys.length - 60).forEach(function(key){ delete knownNames[key]; });
+    }
+    LS.set(NAMES_KEY, knownNames);
+  }
+
+  function suggestFilename(meta){
+    const remembered = knownNames[meta.title];
+    if (typeof remembered === 'string' && remembered) return remembered;
+    const year = (meta.start || '').slice(0, 4) || String(new Date().getFullYear());
+    const month = (meta.start || '').slice(5, 7);
+    const slug = slugOf(meta.destination);
+    const stem = slug.length >= 3 ? slug + '-' + year : 'trip-' + year + (month ? '-' + month : '');
+    return stem + '.html';
+  }
+
+  function setStatus(kind, message){
+    codeStatus.hidden = false;
+    codeStatus.className = 'code-status' + (kind === 'ok' ? '' : ' is-' + kind);
+    codeStatus.textContent = message;
+  }
+
+  function readPasted(source){
+    if (!source.trim()) return { state: 'empty' };
+    const lower = source.toLowerCase();
+    if (lower.indexOf('<html') === -1 || lower.indexOf('</html>') === -1) {
+      return { state: 'bad', message: '看起來不是完整檔案：要包含 <html> 與 </html>。' };
+    }
+    const meta = parseTripHtml(source);
+    if (!meta.title) {
+      return { state: 'bad', message: '讀不到旅程名稱。請 AI 補上 <meta name="trip:title" content="…">，或改用「＋ 新增旅程」手動登記。' };
+    }
+    return { state: 'ok', meta: meta };
+  }
+
+  function buildTripFromMeta(meta, href){
+    const destination = meta.destination || meta.title;
+    const start = meta.start;
+    const end = meta.end || start;
+    const days = start ? calcDays(start, end) : 1;
+    return {
+      id: 'c-' + uid(),
+      custom: true,
+      title: meta.title,
+      destination: destination,
+      ghost: destination.replace(/[・\s]/g, '').slice(0, 2) || '旅',
+      start: start,
+      end: end,
+      days: days,
+      nights: Math.max(days - 1, 0),
+      dateLabel: start ? formatRange(start, end) : '日期待定',
+      desc: meta.desc || '我的新旅程，正在編寫中。',
+      emoji: meta.emoji,
+      theme: meta.theme,
+      href: href,
+      tags: ['自訂旅程']
+    };
+  }
+
+  function syncPasteState(){
+    const parsed = readPasted(codeBox.value);
+    if (parsed.state === 'empty') {
+      codeStatus.hidden = true;
+      saveHtmlBtn.disabled = true;
+      return;
+    }
+    if (parsed.state === 'bad') {
+      setStatus('bad', parsed.message);
+      saveHtmlBtn.disabled = true;
+      return;
+    }
+    const meta = parsed.meta;
+    if (!codeFilename.value.trim()) codeFilename.value = suggestFilename(meta);
+    const bits = [meta.title, meta.destination || '未填目的地', meta.start ? formatRange(meta.start, meta.end) : '日期待定'];
+    setStatus(
+      meta.start ? 'ok' : 'warn',
+      '已讀取：' + bits.join(' · ') + (meta.start ? '' : '（沒有 trip:start，卡片會顯示「旅程」）')
+    );
+    saveHtmlBtn.disabled = false;
+  }
+
+  let pasteTimer = null;
+  if (codeBox) {
+    codeBox.addEventListener('input', function(){
+      window.clearTimeout(pasteTimer);
+      pasteTimer = window.setTimeout(syncPasteState, 220);
+    });
+  }
+
+  /* ---------- 儲存檔案 ---------- */
+  async function writeHtmlFile(filename, content){
+    const name = basenameOf(filename) || 'trip.html';
+    if (typeof window.showSaveFilePicker === 'function') {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: name,
+          types: [{ description: 'HTML 檔案', accept: { 'text/html': ['.html', '.htm'] } }]
+        });
+        const writable = await handle.createWritable();
+        await writable.write(new Blob([content], { type: 'text/html;charset=utf-8' }));
+        await writable.close();
+        return { ok: true, method: 'picker', name: handle.name };
+      } catch (err) {
+        if (err && err.name === 'AbortError') return { ok: false, canceled: true };
+        /* 其他錯誤（例如不支援 file://）就退回下載 */
+      }
+    }
+    const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = name;
+    link.rel = 'noopener';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function(){ URL.revokeObjectURL(url); }, 5000);
+    return { ok: true, method: 'download' };
+  }
+
+  if (saveHtmlBtn) {
+    saveHtmlBtn.addEventListener('click', async function(){
+      const parsed = readPasted(codeBox.value);
+      if (parsed.state !== 'ok') {
+        setStatus('bad', parsed.message || '請先貼上完整的 HTML 檔。');
+        saveHtmlBtn.disabled = true;
+        return;
+      }
+      const href = normalizeHref(codeFilename.value);
+      if (!href) {
+        setStatus('bad', '請填寫檔名，例如 kansai-2027.html。');
+        codeFilename.focus();
+        return;
+      }
+
+      const meta = parsed.meta;
+      const existing = customTrips.find(function(trip){
+        return trip.href.toLowerCase() === href.toLowerCase();
+      });
+      if (existing && !window.confirm('手帳已有「' + existing.title + '」指向 ' + href + '，要取代它嗎？\n（只會更新卡片，不會刪除任何檔案）')) {
+        return;
+      }
+
+      const label = saveHtmlBtn.textContent;
+      saveHtmlBtn.disabled = true;
+      saveHtmlBtn.textContent = '儲存中…';
+
+      let result;
+      try {
+        result = await writeHtmlFile(href, codeBox.value);
+      } catch (err) {
+        result = { ok: false, error: true };
+      }
+
+      saveHtmlBtn.textContent = label;
+
+      if (result.canceled) {
+        saveHtmlBtn.disabled = false;
+        setStatus('warn', '已取消儲存，沒有加入手帳。');
+        return;
+      }
+      if (!result.ok) {
+        saveHtmlBtn.disabled = false;
+        setStatus('bad', '儲存失敗。可以改用「＋ 新增旅程」手動登記，或把檔案自行放到同一資料夾。');
+        return;
+      }
+
+      let finalHref = href;
+      if (result.method === 'picker' && result.name && href.indexOf('/') === -1 && href.indexOf('\\') === -1) {
+        finalHref = normalizeHref(result.name) || href;
+      }
+
+      const trip = buildTripFromMeta(meta, finalHref);
+      if (existing) {
+        customTrips = customTrips.filter(function(item){ return item.id !== existing.id; });
+      }
+      customTrips.unshift(trip);
+      saveCustomTrips();
+      rememberName(meta.title, finalHref);
+      render();
+
+      codeBox.value = '';
+      codeFilename.value = '';
+      saveHtmlBtn.disabled = true;
+
+      if (result.method === 'download') {
+        setStatus('warn', 'HTML 已下載到「下載」資料夾。請把它移到 index.html 同一資料夾，卡片才打得開；卡片已先加入手帳。');
+      } else {
+        setStatus('ok', '已儲存「' + basenameOf(finalHref) + '」，旅程已加入手帳。');
+      }
+      showToast('旅程已加入手帳');
+
+      window.setTimeout(function(){
+        const card = document.querySelector('[data-trip-id="' + trip.id + '"]');
+        if (!card) return;
+        try { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        catch (err) { card.scrollIntoView(); }
+      }, 140);
+    });
+  }
+
+  render();
+  syncThemePills();
+  syncEmojiChips();
+})();
+</script>
+</body>
+</html>
