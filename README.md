@@ -4,6 +4,8 @@ A Japanese stationery-style travel notebook. **One trip = one HTML file.** The l
 
 Built as plain static HTML — no framework, no build tooling for the site itself. Open a file and it works.
 
+For the developer handoff — layout, privacy model, deploy settings, known limits — see [`HANDOFF.md`](HANDOFF.md).
+
 ## Layout
 
 | Path | Purpose |
