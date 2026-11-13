@@ -52,7 +52,7 @@ The model is **one trip = one HTML file**, plus a landing page that lists trips 
 - Hero kicker is just `旅の記録` (no year). The faint `#heroYear` ghost is set by JS to `max(current year, latest trip year)`.
 - **新旅程工作台**:
   - Left: editable prompt template. Edits persist in `travel.notebook.prompt.v1`; 「還原範本」 restores the built-in default.
-  - Right: paste a finished trip HTML. It reads `trip:*` meta tags with `DOMParser`, suggests a filename, saves via `showSaveFilePicker` (falls back to download), registers a card, and remembers name → filename in `travel.notebook.names.v1`.
+  - Right: paste a finished trip HTML, or load one with **📂 從裝置選擇 HTML** (`<input type="file">` + `FileReader`, 4 MB cap, BOM stripped; a picked file replaces the filename field with its own name). It reads `trip:*` meta tags with `DOMParser`, suggests a filename, saves via `showSaveFilePicker` (falls back to download), registers a card, and remembers name → filename in `travel.notebook.names.v1`.
   - The saved file must land **in the same folder as `index.html`**, or the card link breaks.
   - A collapsible **發布到網站（GitHub）** panel can instead upload the page: it masks client-side, then commits `docs/<file>` and `docs/trips.json` through the GitHub Contents API. See [Publishing](#publishing).
 

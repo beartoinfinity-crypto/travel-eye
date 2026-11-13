@@ -326,6 +326,9 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
   box-shadow:0 0 0 3px rgba(232,152,154,.16);
 }
 .studio-tools{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:wrap}
+.pick-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+.pick-btn{cursor:pointer}
+.pick-btn:hover{border-color:var(--pink);color:var(--ink)}
 .mini-btn{
   display:inline-flex;align-items:center;gap:5px;
   border:1.5px dashed rgba(92,64,51,.28);border-radius:99px;
@@ -600,9 +603,14 @@ body.modal-open{overflow:hidden}
     <div class="step">
       <span class="step-no" aria-hidden="true">2</span>
       <div class="step-txt">
-        <h3>貼上完成的 HTML</h3>
-        <p>整段貼進來，會自動讀取旅程名稱、目的地、日期與封面 emoji。</p>
+        <h3>貼上或選擇完成的 HTML</h3>
+        <p>整段貼進來，或直接從裝置選擇檔案；會自動讀取旅程名稱、目的地、日期與封面 emoji。</p>
       </div>
+    </div>
+    <div class="pick-row">
+      <label class="mini-btn pick-btn" for="htmlFilePicker">📂 從裝置選擇 HTML</label>
+      <input id="htmlFilePicker" type="file" accept=".html,.htm,text/html" hidden>
+      <span class="studio-note">或貼在下面</span>
     </div>
     <textarea class="code-box" id="codeBox" spellcheck="false" autocomplete="off" placeholder="&lt;!DOCTYPE html&gt;&#10;&lt;html lang=&quot;zh-Hant&quot;&gt; …" aria-label="貼上旅程 HTML 原始碼"></textarea>
     <div class="code-status" id="codeStatus" role="status" aria-live="polite" hidden></div>
@@ -1417,6 +1425,34 @@ body.modal-open{overflow:hidden}
     codeBox.addEventListener('input', function(){
       window.clearTimeout(pasteTimer);
       pasteTimer = window.setTimeout(syncPasteState, 220);
+    });
+  }
+
+  /* ---------- 從裝置選擇 HTML ---------- */
+  const htmlFilePicker = $('#htmlFilePicker');
+  if (htmlFilePicker) {
+    htmlFilePicker.addEventListener('change', function(){
+      const file = htmlFilePicker.files && htmlFilePicker.files[0];
+      if (!file) return;
+
+      if (file.size > 4 * 1024 * 1024) {
+        setStatus('bad', '檔案超過 4 MB，請確認這是單一旅程頁面。');
+        htmlFilePicker.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(){
+        codeBox.value = String(reader.result || '').replace(/^\uFEFF/, '');
+        if (file.name) codeFilename.value = file.name;
+        syncPasteState();
+        showToast('已載入 ' + file.name);
+      };
+      reader.onerror = function(){
+        setStatus('bad', '讀取檔案失敗，請再試一次。');
+      };
+      reader.readAsText(file, 'utf-8');
+      htmlFilePicker.value = '';
     });
   }
 

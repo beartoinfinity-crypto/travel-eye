@@ -106,7 +106,7 @@ python -m http.server 8000
 At the bottom of `index.html`:
 
 1. **複製生成提示詞** — the box holds a ready prompt covering the style, structure and required meta tags. Replace the 【】 placeholders with your trip details and copy it into an AI chat.
-2. **貼上完成的 HTML** — paste the returned HTML. The page reads its metadata live and suggests a filename. Then either:
+2. **貼上或選擇完成的 HTML** — paste the returned HTML, or press **📂 從裝置選擇 HTML** to load a file already saved on your device. The page reads its metadata live and suggests a filename; a picked file keeps its own name. Then either:
    - **儲存 HTML 並加入手帳** — saves the file next to `index.html` and adds the card locally, or
    - **發布到網站（GitHub）** — uploads the masked page and its card straight to `docs/` (see below).
 
@@ -164,7 +164,7 @@ The page must sit in the project root and carry `<meta name="trip:title">`; the 
 
 Use this when the trip was generated on a phone or a machine without the repo:
 
-1. Paste the HTML and pick a filename.
+1. Paste the HTML — or press **📂 從裝置選擇 HTML** to load it from your device — then check the filename.
 2. Open **發布到網站（GitHub）**.
 3. Paste a **fine-grained personal access token** for this repo with **Contents: Read and write**.
 4. List any private terms to redact (names, hotels, booking references), one per line.
