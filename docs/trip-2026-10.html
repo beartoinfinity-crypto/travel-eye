@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>哆啦A夢的北陸 6天5夜冒險地圖 | 旅程手帳</title>
+
+  <!-- 首頁自動登記 Meta 資訊 -->
+  <meta name="trip:title" content="哆啦A夢的北陸 6天5夜冒險地圖" />
+  <meta name="trip:destination" content="金澤・立山黑部・高岡・白川鄉" />
+  <meta name="trip:start" content="2026-10-✱✱" />
+  <meta name="trip:end" content="2026-11-✱✱" />
+  <meta name="trip:emoji" content="🍁" />
+  <meta name="trip:theme" content="tan" />
+  <meta name="trip:desc" content="以金澤為基地，集齊室堂初雪、三段紅葉、兼六園雪吊、雨晴海岸與童話合掌村。" />
+
+  <!-- Google Fonts: Noto Sans TC & Zen Maru Gothic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-washi: #FAF6EC;
+      --grid-line: rgba(92, 64, 51, 0.065);
+      --brown-main: #5C4033;
+      --brown-light: #8C6D5E;
+      --brown-soft: #EDE4D3;
+      --sakura-pink: #E8989A;
+      --sakura-soft: rgba(232, 152, 154, 0.25);
+      --matcha-green: #7A9A7E;
+      --matcha-soft: rgba(122, 154, 126, 0.22);
+      --dora-blue: #5B9BD5;
+      --card-bg: #FFFDF9;
+      --shadow-soft: 0 4px 14px rgba(92, 64, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0 0 88px 0;
+      background-color: var(--bg-washi);
+      background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 20px 20px;
+      color: var(--brown-main);
+      font-family: 'Noto Sans TC', sans-serif;
+      line-height: 1.55;
+    }
+
+    h1, h2, h3, .zen-font {
+      font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
+    }
+
+    /* 頂部返回列 */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px 6px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .trip-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: var(--brown-main);
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      background: var(--card-bg);
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1.5px dashed var(--brown-light);
+      box-shadow: 0 2px 6px rgba(92, 64, 51, 0.06);
+      transition: transform 0.15s ease;
+    }
+
+    .trip-back:active {
+      transform: scale(0.96);
+    }
+
+    .badge-season {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--matcha-green);
+      background: var(--matcha-soft);
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    /* 主容器 */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 6px 16px 20px;
+    }
+
+    /* 日式車票 / 登機證風格標題卡 */
+    .ticket-header {
+      position: relative;
+      background: var(--card-bg);
+      border: 2px solid var(--brown-main);
+      border-radius: 16px;
+      padding: 18px 18px 16px;
+      margin: 8px 0 16px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .ticket-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--sakura-pink),
+        var(--sakura-pink) 10px,
+        var(--matcha-green) 10px,
+        var(--matcha-green) 20px
+      );
+    }
+
+    .ticket-top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      color: var(--brown-light);
+      font-weight: 700;
+      margin-top: 4px;
+      border-bottom: 1.5px dashed rgba(92, 64, 51, 0.25);
+      padding-bottom: 8px;
+    }
+
+    .ticket-title {
+      margin: 10px 0 6px;
+      font-size: 1.32rem;
+      font-weight: 900;
+      color: var(--brown-main);
+      line-height: 1.3;
+    }
+
+    .ticket-route {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-washi);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      border: 1px solid rgba(92, 64, 51, 0.15);
+    }
+
+    .route-point {
+      text-align: center;
+    }
+
+    .route-code {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 900;
+      font-size: 1.15rem;
+      color: var(--brown-main);
+    }
+
+    .route-name {
+      font-size: 0.75rem;
+      color: var(--brown-light);
+    }
+
+    .route-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--sakura-pink);
+      font-weight: 700;
+    }
+
+    .ticket-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1.5px dashed rgba(92, 64, 51, 0.25);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .ticket-cutout-left,
+    .ticket-cutout-right {
+      position: absolute;
+      bottom: 34px;
+      width: 18px;
+      height: 18px;
+      background-color: var(--bg-washi);
+      border: 2px solid var(--brown-main);
+      border-radius: 50%;
+    }
+
+    .ticket-cutout-left {
+      left: -11px;
+    }
+
+    .ticket-cutout-right {
+      right: -11px;
+    }
+
+    /* Sticky 橫向滑動 Day 1 ~ Day 6 頁籤 */
+    .day-tabs-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(250, 246, 236, 0.94);
+      backdrop-filter: blur(6px);
+      padding: 8px 0 10px;
+      margin: 0 -16px 14px;
+      border-bottom: 1px dashed rgba(92, 64, 51, 0.2);
+    }
+
+    .day-tabs-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 16px;
+      scrollbar-width: none;
+    }
+
+    .day-tabs-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .day-tab {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 7px 14px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(92, 64, 51, 0.22);
+      background: var(--card-bg);
+      color: var(--brown-main);
+      font-family: 'Zen Maru Gothic', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .day-tab .tab-day {
+      font-size: 0.85rem;
+      font-weight: 900;
+    }
+
+    .day-tab .tab-date {
+      font-size: 0.72rem;
+      color: var(--brown-light);
+    }
+
+    .day-tab.active {
+      background: var(--brown-main);
+      color: #FFFDF9;
+      border-color: var(--brown-main);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(92, 64, 51, 0.2);
+    }
+
+    .day-tab.active .tab-date {
+      color: #F5E6D3;
+    }
+
+    /* 每日標題橫幅 */
+    .day-header-banner {
+      background: var(--brown-soft);
+      border-left: 5px solid var(--matcha-green);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .day-header-banner h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--brown-main);
+    }
+
+    .day-header-banner p {
+      margin: 3px 0 0;
+      font-size: 0.8rem;
+      color: var(--brown-light);
+    }
+
+    .base-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: #FFFDF9;
+      color: var(--brown-main);
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(92, 64, 51, 0.2);
+      white-space: nowrap;
+    }
+
+    /* 行程卡片 + 半透明紙膠帶 (Washi Tape) */
+    .spot-card {
+      position: relative;
+      background: var(--card-bg);
+      border: 1.5px solid rgba(92, 64, 51, 0.18);
+      border-radius: 14px;
+      padding: 20px 16px 15px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* 紙膠帶斜角裝飾 */
+    .washi-tape {
+      position: absolute;
+      top: -10px;
+      left: 18px;
+      width: 84px;
+      height: 22px;
+      background-color: rgba(232, 152, 154, 0.55);
+      transform: rotate(-3.5deg);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      border-left: 2px dotted rgba(255, 255, 255, 0.6);
+      border-right: 2px dotted rgba(255, 255, 255, 0.6);
+      pointer-events: none;
+    }
+
+    .spot-card:nth-child(even) .washi-tape {
+      background-color: rgba(122, 154, 126, 0.52);
+      left: auto;
+      right: 68px;
+      transform: rotate(3deg);
+    }
+
+    .spot-card:nth-child(3n) .washi-tape {
+      background-color: rgba(226, 185, 118, 0.55);
+      left: 35%;
+      transform: rotate(-1.8deg);
+    }
+
+    /* 右上角圓形日式紀念印章 (Stamp) */
+    .japanese-stamp {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2.5px solid var(--sakura-pink);
+      color: var(--sakura-pink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 900;
+      font-size: 0.72rem;
+      line-height: 1.05;
+      transform: rotate(12deg);
+      opacity: 0.9;
+      background: rgba(255, 253, 249, 0.85);
+      box-shadow: inset 0 0 0 1.5px var(--sakura-pink);
+      user-select: none;
+    }
+
+    .japanese-stamp.stamp-green {
+      border-color: var(--matcha-green);
+      color: var(--matcha-green);
+      box-shadow: inset 0 0 0 1.5px var(--matcha-green);
+      transform: rotate(-10deg);
+    }
+
+    .japanese-stamp.stamp-brown {
+      border-color: var(--brown-main);
+      color: var(--brown-main);
+      box-shadow: inset 0 0 0 1.5px var(--brown-main);
+      transform: rotate(8deg);
+    }
+
+    .spot-time-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      padding-right: 54px;
+    }
+
+    .spot-time {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 900;
+      font-size: 0.85rem;
+      color: #FFFDF9;
+      background: var(--brown-main);
+      padding: 2px 9px;
+      border-radius: 8px;
+    }
+
+    .spot-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 8px;
+      background: var(--matcha-soft);
+      color: var(--brown-main);
+    }
+
+    .spot-name {
+      margin: 4px 0 8px;
+      padding-right: 52px;
+      font-size: 1.12rem;
+      font-weight: 900;
+      color: var(--brown-main);
+    }
+
+    .spot-note {
+      background: var(--bg-washi);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.86rem;
+      color: #4A352A;
+      margin-bottom: 12px;
+      border-left: 3px solid var(--sakura-pink);
+    }
+
+    .maps-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--matcha-green);
+      color: #FFFDF9;
+      text-decoration: none;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border-radius: 10px;
+      box-shadow: 0 3px 0 #5E7B62;
+      transition: transform 0.1s ease;
+    }
+
+    .maps-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #5E7B62;
+    }
+
+    /* 分頁內容切換 */
+    .page-section {
+      display: none;
+    }
+
+    .page-section.active {
+      display: block;
+      animation: fadeIn 0.22s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 匯率與記帳分頁樣式 */
+    .notebook-box {
+      background: var(--card-bg);
+      border: 1.5px solid rgba(92, 64, 51, 0.2);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .box-title {
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1.5px dashed rgba(92, 64, 51, 0.2);
+      padding-bottom: 8px;
+    }
+
+    .rate-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-group label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--brown-light);
+    }
+
+    input[type="number"],
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid rgba(92, 64, 51, 0.28);
+      border-radius: 10px;
+      background: var(--bg-washi);
+      color: var(--brown-main);
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--matcha-green);
+      background: #FFFDF9;
+    }
+
+    .convert-preview {
+      display: flex;
+      justify-content: space-around;
+      background: var(--brown-soft);
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .convert-item span {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--brown-light);
+    }
+
+    .convert-item strong {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 1.1rem;
+      color: var(--brown-main);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 11px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 10px;
+      background: var(--sakura-pink);
+      color: #FFFDF9;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 900;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #C77779;
+    }
+
+    .btn-primary:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #C77779;
+    }
+
+    .expense-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: var(--brown-main);
+      color: #FFFDF9;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .expense-summary small {
+      display: block;
+      font-size: 0.72rem;
+      opacity: 0.85;
+    }
+
+    .expense-summary div {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 900;
+      font-size: 0.98rem;
+    }
+
+    .expense-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .expense-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(92, 64, 51, 0.2);
+    }
+
+    .expense-item:last-child {
+      border-bottom: none;
+    }
+
+    .exp-info strong {
+      display: block;
+      font-size: 0.92rem;
+    }
+
+    .exp-info small {
+      font-size: 0.75rem;
+      color: var(--brown-light);
+    }
+
+    .exp-amount {
+      text-align: right;
+    }
+
+    .exp-amount span {
+      display: block;
+      font-weight: 900;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      color: var(--brown-main);
+    }
+
+    .exp-amount small {
+      font-size: 0.72rem;
+      color: var(--matcha-green);
+      font-weight: 700;
+    }
+
+    .btn-del {
+      margin-left: 8px;
+      background: none;
+      border: 1px solid rgba(232, 152, 154, 0.7);
+      color: #C77779;
+      border-radius: 6px;
+      padding: 3px 7px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    /* 行前清單 Checklist 樣式 */
+    .progress-bar-wrap {
+      background: var(--brown-soft);
+      border-radius: 10px;
+      height: 12px;
+      overflow: hidden;
+      margin: 8px 0 4px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--matcha-green), var(--sakura-pink));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .checklist-group-title {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: var(--brown-main);
+      background: var(--brown-soft);
+      padding: 6px 12px;
+      border-radius: 8px;
+      margin: 14px 0 8px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 6px;
+      border-bottom: 1px dashed rgba(92, 64, 51, 0.15);
+      cursor: pointer;
+    }
+
+    .check-item input[type="checkbox"] {
+      width: 19px;
+      height: 19px;
+      margin-top: 2px;
+      accent-color: var(--matcha-green);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .check-item label {
+      font-size: 0.9rem;
+      cursor: pointer;
+      flex: 1;
+      transition: color 0.2s;
+    }
+
+    .check-item.checked label {
+      text-decoration: line-through;
+      color: var(--brown-light);
+      opacity: 0.75;
+    }
+
+    .add-check-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .add-check-row button {
+      padding: 0 16px;
+      border: none;
+      border-radius: 10px;
+      background: var(--matcha-green);
+      color: #FFFDF9;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* 底部固定導覽列 Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: #FFFDF9;
+      border-top: 2px solid var(--brown-main);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 12px rgba(92, 64, 51, 0.08);
+    }
+
+    .nav-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--brown-light);
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px 0;
+      border-radius: 10px;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn .nav-icon {
+      font-size: 1.25rem;
+    }
+
+    .nav-btn.active {
+      color: var(--brown-main);
+      background: var(--sakura-soft);
+      font-weight: 900;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== 分頁 1：每日行程 ==================== -->
+  <div id="tab-itinerary" class="page-section active">
+    <div class="top-bar">
+      <a class="trip-back" href="index.html">← 旅程手帳</a>
+      <span class="badge-season">🍁 初雪・紅葉・雪吊</span>
+    </div>
+
+    <div class="container">
+      <!-- 日式車票 / 登機證標題卡 -->
+      <header class="ticket-header">
+        <div class="ticket-top-meta">
+          <span>HOKURIKU ADVENTURE PASS</span>
+          <span>6 DAYS 5 NIGHTS</span>
+        </div>
+        <h1 class="ticket-title">🗺️ 哆啦A夢的北陸 6天5夜冒險地圖</h1>
+        <div class="ticket-route">
+          <div class="route-point">
+            <div class="route-code">KANAZAWA</div>
+            <div class="route-name">🌟 金澤住宿基地</div>
+          </div>
+          <div class="route-arrow">
+            <span>🚄 放射狀漫遊 🚌</span>
+            <span>━━━━━━━━━━▶</span>
+          </div>
+          <div class="route-point">
+            <div class="route-code">HOKURIKU</div>
+            <div class="route-name">立山・高岡・白川鄉</div>
+          </div>
+        </div>
+        <div class="ticket-footer">
+          <span>📅 2026/10/✱✱ (六) – 11/✱✱ (四)</span>
+          <span>🎫 NO. 20261031</span>
+        </div>
+        <div class="ticket-cutout-left"></div>
+        <div class="ticket-cutout-right"></div>
+      </header>
+
+      <!-- 頂部固定 Day 1 ~ Day 6 橫向滑動頁籤 -->
+      <div class="day-tabs-sticky">
+        <div class="day-tabs-scroll" id="dayTabs"></div>
+      </div>
+
+      <!-- 當日行程標題與卡片容器 -->
+      <div id="dayBanner" class="day-header-banner"></div>
+      <div id="spotsContainer"></div>
+    </div>
+  </div>
+
+  <!-- ==================== 分頁 2：匯率與記帳 ==================== -->
+  <div id="tab-budget" class="page-section">
+    <div class="top-bar">
+      <a class="trip-back" href="index.html">← 旅程手帳</a>
+      <span class="badge-season">💴 旅行小帳本</span>
+    </div>
+
+    <div class="container">
+      <div class="notebook-box">
+        <h2 class="box-title">💱 即時日幣匯率換算器</h2>
+        <div class="rate-grid">
+          <div class="input-group">
+            <label for="rateTwd">1 日圓 (JPY) ＝ 台幣 (TWD)</label>
+            <input type="number" id="rateTwd" step="0.0001" placeholder="0.215" />
+          </div>
+          <div class="input-group">
+            <label for="rateHkd">1 日圓 (JPY) ＝ 港幣 (HKD)</label>
+            <input type="number" id="rateHkd" step="0.0001" placeholder="0.052" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="calcJpy">輸入日幣金額 (¥ JPY)</label>
+          <input type="number" id="calcJpy" placeholder="例如：1500" inputmode="numeric" />
+        </div>
+        <div class="convert-preview">
+          <div class="convert-item">
+            <span>約合台幣 (TWD)</span>
+            <strong id="previewTwd">NT$ 0</strong>
+          </div>
+          <div class="convert-item">
+            <span>約合港幣 (HKD)</span>
+            <strong id="previewHkd">HK$ 0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="notebook-box">
+        <h2 class="box-title">✍️ 新增消費紀錄</h2>
+        <div class="rate-grid">
+          <div class="input-group">
+            <label for="expDay">日期</label>
+            <select id="expDay">
+              <option value="Day 1 (10/✱✱)">Day 1 (10/✱✱)</option>
+              <option value="Day 2 (11/✱✱)">Day 2 (11/✱✱)</option>
+              <option value="Day 3 (11/✱✱)">Day 3 (11/✱✱)</option>
+              <option value="Day 4 (11/✱✱)">Day 4 (11/✱✱)</option>
+              <option value="Day 5 (11/✱✱)">Day 5 (11/✱✱)</option>
+              <option value="Day 6 (11/✱✱)">Day 6 (11/✱✱)</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="expCat">類別</label>
+            <select id="expCat">
+              <option value="🍜 美食">🍜 美食</option>
+              <option value="🚄 交通">🚄 交通</option>
+              <option value="🎁 手信購物">🎁 手信購物</option>
+              <option value="🎫 門票體驗">🎫 門票體驗</option>
+              <option value="🏨 住宿雜支">🏨 住宿雜支</option>
+            </select>
+          </div>
+        </div>
+        <div class="rate-grid">
+          <div class="input-group">
+            <label for="expTitle">消費項目名稱</label>
+            <input type="text" id="expTitle" placeholder="如：近江町海鮮丼" />
+          </div>
+          <div class="input-group">
+            <label for="expAmount">金額 (¥ JPY)</label>
+            <input type="number" id="expAmount" placeholder="2800" inputmode="numeric" />
+          </div>
+        </div>
+        <button class="btn-primary" id="addExpenseBtn">＋ 記下一筆消費</button>
+      </div>
+
+      <div class="notebook-box">
+        <h2 class="box-title">📊 旅費總計與明細</h2>
+        <div class="expense-summary">
+          <div>
+            <small>總日幣</small>
+            <div id="totalJpy">¥0</div>
+          </div>
+          <div>
+            <small>約台幣</small>
+            <div id="totalTwd">NT$0</div>
+          </div>
+          <div>
+            <small>約港幣</small>
+            <div id="totalHkd">HK$0</div>
+          </div>
+        </div>
+        <ul class="expense-list" id="expenseList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 分頁 3：行前清單 ==================== -->
+  <div id="tab-checklist" class="page-section">
+    <div class="top-bar">
+      <a class="trip-back" href="index.html">← 旅程手帳</a>
+      <span class="badge-season">🎒 出發裝備檢查</span>
+    </div>
+
+    <div class="container">
+      <div class="notebook-box">
+        <h2 class="box-title">✅ 北陸初雪＆秋遊行前清單</h2>
+        <div style="display:flex; justify-content:space-between; font-size:0.82rem; font-weight:700;">
+          <span>準備進度</span>
+          <span id="checkProgressText">0 / 0 完成</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="checkProgressBar"></div>
+        </div>
+
+        <div id="checklistContainer"></div>
+
+        <div class="add-check-row">
+          <input type="text" id="newCheckInput" placeholder="新增自訂攜帶物品..." />
+          <button id="addCheckBtn">新增</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 底部固定導覽列 ==================== -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-target="tab-itinerary">
+      <span class="nav-icon">📅</span>
+      <span>每日行程</span>
+    </button>
+    <button class="nav-btn" data-target="tab-budget">
+      <span class="nav-icon">💴</span>
+      <span>匯率與記帳</span>
+    </button>
+    <button class="nav-btn" data-target="tab-checklist">
+      <span class="nav-icon">🎒</span>
+      <span>行前清單</span>
+    </button>
+  </nav>
+
+  <script>
+    // ==================== 1. 行程資料庫 ====================
+    const itineraryData = [
+      {
+        day: "Day 1",
+        date: "10/✱✱ (六)",
+        title: "抵達金澤・舊城速攻漫步",
+        subtitle: "🌟 住宿基地：金澤市區",
+        spots: [
+          {
+            time: "下午抵達",
+            tag: "交通・入住",
+            stamp: "基地",
+            stampClass: "stamp-brown",
+            name: "JR 金澤站（鼓門）& 飯店入住",
+            note: "抵達金澤車站拍照打卡，先到市區飯店寄放行李，輕裝展開北陸之旅。",
+            mapQuery: "金沢駅 鼓門"
+          },
+          {
+            time: "17:30 前",
+            tag: "必吃海鮮",
+            stamp: "必吃",
+            stampClass: "",
+            name: "近江町市場",
+            note: "⚠️ 多數店舖約 17:30 打烊！抵達金澤後第一時間先衝市場品嚐新鮮海鮮丼與烤海鮮。",
+            mapQuery: "近江町市場"
+          },
+          {
+            time: "傍晚散步",
+            tag: "歷史古蹟",
+            stamp: "打卡",
+            stampClass: "stamp-green",
+            name: "尾山神社",
+            note: "欣賞融合日本傳統與西洋彩繪玻璃的中西合璧神門，傍晚點燈與秋日庭園極具氣氛。",
+            mapQuery: "尾山神社"
+          },
+          {
+            time: "晚餐時光",
+            tag: "在地美食",
+            stamp: "必吃",
+            stampClass: "",
+            name: "香林坊・片町（金澤關東煮）",
+            note: "金澤最熱鬧的商圈，晚餐推薦品嚐湯頭鮮美的特色「金澤關東煮（金沢おでん）」。",
+            mapQuery: "香林坊 金沢おでん"
+          }
+        ]
+      },
+      {
+        day: "Day 2",
+        date: "11/✱✱ (日)",
+        title: "立山黑部・室堂來回雪景絕景",
+        subtitle: "❄️ 高山重頭戲（金澤往返）",
+        spots: [
+          {
+            time: "06:30 出發",
+            tag: "早班轉乘",
+            stamp: "交通",
+            stampClass: "stamp-brown",
+            name: "金澤站 ➔ 富山站 ➔ 電鐵富山 ➔ 立山站",
+            note: "⚠️ 嚴格執行「室堂來回」！06:30 準時搭新幹線至富山，轉乘富山地方鐵道前往立山站（單程約2小時）。",
+            mapQuery: "立山駅 富山県"
+          },
+          {
+            time: "10:30 抵達",
+            tag: "高山絕景",
+            stamp: "絕景",
+            stampClass: "stamp-green",
+            name: "立山黑部・室堂（海拔 2,450 公尺）",
+            note: "欣賞高山初雪與三段紅葉奇景！11月初室堂隨時零下且有積雪，務必穿著全套防風冬裝與防滑鞋；出發前確認官網運行狀況（備妥富山市內遊作 Plan B）。",
+            mapQuery: "立山室堂"
+          },
+          {
+            time: "19:00-20:00",
+            tag: "返回基地",
+            stamp: "基地",
+            stampClass: "stamp-brown",
+            name: "返回金澤市區享用暖胃晚餐",
+            note: "留意山上交通尾班車時間（約 15:00–16:00 區間下山），傍晚平安回到金澤享用熱騰騰拉麵或料理。",
+            mapQuery: "金沢駅"
+          }
+        ]
+      },
+      {
+        day: "Day 3",
+        date: "11/✱✱ (一)",
+        title: "富山・高岡「哆啦A夢」與絕景海岸",
+        subtitle: "🚄 新幹線北上約 15–30 分鐘",
+        spots: [
+          {
+            time: "上午出發",
+            tag: "新幹線轉乘",
+            stamp: "交通",
+            stampClass: "stamp-brown",
+            name: "新高岡站 ➔ 站外轉乘至高岡",
+            note: "⚠️ 北陸新幹線停靠的是「新高岡站」，非 JR 高岡站，需出站進行站外轉乘（標準轉乘約 8 分鐘）。",
+            mapQuery: "新高岡駅"
+          },
+          {
+            time: "上午絕景",
+            tag: "海景雪山",
+            stamp: "打卡",
+            stampClass: "stamp-green",
+            name: "雨晴海岸",
+            note: "晴天時可從海灘眺望浮在富山灣海面上的 3,000 公尺立山連峰雪景，景色極為震撼。",
+            mapQuery: "雨晴海岸"
+          },
+          {
+            time: "下午漫遊",
+            tag: "哆啦A夢故鄉",
+            stamp: "必訪",
+            stampClass: "",
+            name: "高岡市區（哆啦A夢銅像・彩繪電車・國寶瑞龍寺）",
+            note: "作者藤子·F·不二雄的故鄉！在車站前與角色銅像合照、搭乘萬葉線哆啦A夢彩繪路面電車，並參拜對稱壯麗的國寶瑞龍寺。",
+            mapQuery: "高岡駅 ドラえもんの散歩道"
+          },
+          {
+            time: "傍晚返回",
+            tag: "返回基地",
+            stamp: "必吃",
+            stampClass: "",
+            name: "返回金澤（品嚐北陸名物黑喉魚）",
+            note: "搭新幹線輕鬆返回金澤基地，晚餐推薦品嚐油脂豐厚的鹽烤或炙燒「黑喉魚（のどぐろ）」。",
+            mapQuery: "金沢駅 のどぐろ"
+          }
+        ]
+      },
+      {
+        day: "Day 4",
+        date: "11/✱✱ (二)",
+        title: "金澤經典文化・雪吊與藝術洗禮",
+        subtitle: "🏯 避開假日人潮，悠遊市區精華",
+        spots: [
+          {
+            time: "上午時段",
+            tag: "名園雪吊",
+            stamp: "打卡",
+            stampClass: "stamp-green",
+            name: "兼六園（11/✱✱ 起雪吊初現）",
+            note: "11/✱✱ 剛開始架設松樹「雪吊」防護工程，此時造訪能看見職人施工與初裝的金色繩索搭配初秋紅葉。",
+            mapQuery: "兼六園"
+          },
+          {
+            time: "中午・下午",
+            tag: "現代藝術",
+            stamp: "必訪",
+            stampClass: "",
+            name: "金澤 21 世紀美術館",
+            note: "館方逢週一休館，11/✱✱ 週二正常開放！體驗知名《泳池》展區（進入地下展區需提前網上預約）。",
+            mapQuery: "金沢21世紀美術館"
+          },
+          {
+            time: "下午茶・傍晚",
+            tag: "懷舊老街",
+            stamp: "必吃",
+            stampClass: "",
+            name: "東茶屋街 & 主計町茶屋街",
+            note: "漫步江戶木造格子窗老街，品嚐奢華的箔一金箔冰淇淋，選購九谷燒與金箔工藝伴手禮。",
+            mapQuery: "ひがし茶屋街"
+          }
+        ]
+      },
+      {
+        day: "Day 5",
+        date: "11/✱✱ (三)",
+        title: "世界遺產・白川鄉合掌村一日遊",
+        subtitle: "🚌 避開 11/✱✱ 文化之日國定假日人潮",
+        spots: [
+          {
+            time: "上午出發",
+            tag: "預約制巴士",
+            stamp: "交通",
+            stampClass: "stamp-brown",
+            name: "金澤站西口巴士總站 ➔ 白川鄉",
+            note: "⚠️ 金澤⇄白川鄉高速巴士為「全席預約制」（車程約 1 小時），務必提早於網上預訂來回指定席。",
+            mapQuery: "金沢駅西口バスターミナル"
+          },
+          {
+            time: "全天漫遊",
+            tag: "世界遺產",
+            stamp: "絕景",
+            stampClass: "stamp-green",
+            name: "白川鄉合掌村（荻町合掌造集落）",
+            note: "刻意避開 11/✱✱ 日本國定假日，享受更悠閒的童話風合掌造建築與秋日山村風光，可登上城山天守閣展望台俯瞰全景。",
+            mapQuery: "白川郷合掌造り集落"
+          },
+          {
+            time: "下午返回",
+            tag: "返回基地",
+            stamp: "基地",
+            stampClass: "stamp-brown",
+            name: "搭高速巴士返回金澤",
+            note: "下午搭車返回金澤站，晚上在車站周邊自由享用美食與休息。",
+            mapQuery: "金沢駅"
+          }
+        ]
+      },
+      {
+        day: "Day 6",
+        date: "11/✱✱ (四)",
+        title: "市場海鮮早市・伴手禮採買賦歸",
+        subtitle: "🦐 帶著滿滿回憶平安回家",
+        spots: [
+          {
+            time: "09:00 早餐",
+            tag: "海鮮早市",
+            stamp: "必吃",
+            stampClass: "",
+            name: "近江町市場（豪華海鮮丼早餐）",
+            note: "把握最後一天早晨，再訪近江町市場享用鋪滿甜蝦、海膽與當季魚生的澎湃海鮮丼。",
+            mapQuery: "近江町市場"
+          },
+          {
+            time: "上午採買",
+            tag: "手信掃貨",
+            stamp: "必買",
+            stampClass: "",
+            name: "金澤百番街（Anto / Rinto）",
+            note: "與金澤站直通的手信天堂！一站式買齊豆屋金澤萬久金箔蛋糕、中田屋金鍔、不室屋寶之麩與加賀清酒。",
+            mapQuery: "金沢百番街 あんと"
+          },
+          {
+            time: "午後返程",
+            tag: "圓滿賦歸",
+            stamp: "交通",
+            stampClass: "stamp-brown",
+            name: "金澤站出發前往機場 / 返程",
+            note: "確認隨身行李與護照、戰利品，搭乘列車或機場巴士前往機場，圓滿結束北陸冒險！",
+            mapQuery: "金沢駅"
+          }
+        ]
+      }
+    ];
+
+    // ==================== 2. 每日行程渲染邏輯 ====================
+    let activeDayIndex = 0;
+    const dayTabsEl = document.getElementById("dayTabs");
+    const dayBannerEl = document.getElementById("dayBanner");
+    const spotsContainerEl = document.getElementById("spotsContainer");
+
+    function renderDayTabs() {
+      dayTabsEl.innerHTML = itineraryData.map((d, idx) => `
+        <button class="day-tab ${idx === activeDayIndex ? "active" : ""}" onclick="selectDay(${idx})">
+          <span class="tab-day">${d.day}</span>
+          <span class="tab-date">${d.date}</span>
+        </button>
+      `).join("");
+    }
+
+    function renderDayContent() {
+      const current = itineraryData[activeDayIndex];
+      dayBannerEl.innerHTML = `
+        <div>
+          <h2>${current.day}｜${current.date}</h2>
+          <p>${current.title}</p>
+        </div>
+        <span class="base-badge">${current.subtitle}</span>
+      `;
+
+      spotsContainerEl.innerHTML = current.spots.map(spot => {
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.mapQuery)}`;
+        return `
+          <article class="spot-card">
+            <div class="washi-tape"></div>
+            <div class="japanese-stamp ${spot.stampClass}">${spot.stamp}</div>
+            <div class="spot-time-row">
+              <span class="spot-time">${spot.time}</span>
+              <span class="spot-tag">${spot.tag}</span>
+            </div>
+            <h3 class="spot-name">${spot.name}</h3>
+            <div class="spot-note">${spot.note}</div>
+            <a class="maps-btn" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">
+              📍 Google Maps 導航
+            </a>
+          </article>
+        `;
+      }).join("");
+    }
+
+    window.selectDay = function(idx) {
+      activeDayIndex = idx;
+      renderDayTabs();
+      renderDayContent();
+      const activeBtn = dayTabsEl.children[idx];
+      if (activeBtn) {
+        activeBtn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      }
+    };
+
+    renderDayTabs();
+    renderDayContent();
+
+    // ==================== 3. 底部導覽列分頁切換 ====================
+    const navBtns = document.querySelectorAll(".nav-btn");
+    const sections = document.querySelectorAll(".page-section");
+
+    navBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-target");
+        navBtns.forEach(b => b.classList.remove("active"));
+        sections.forEach(s => s.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(targetId).classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+
+    // ==================== 4. 匯率與記帳 (LocalStorage: kansai27.*) ====================
+    const STORAGE_RATES = "kansai27.rates";
+    const STORAGE_EXPENSES = "kansai27.expenses";
+    const STORAGE_CHECKS = "kansai27.checks";
+
+    const rateTwdInput = document.getElementById("rateTwd");
+    const rateHkdInput = document.getElementById("rateHkd");
+    const calcJpyInput = document.getElementById("calcJpy");
+    const previewTwd = document.getElementById("previewTwd");
+    const previewHkd = document.getElementById("previewHkd");
+
+    let rates = JSON.parse(localStorage.getItem(STORAGE_RATES)) || { twd: 0.215, hkd: 0.052 };
+    rateTwdInput.value = rates.twd;
+    rateHkdInput.value = rates.hkd;
+
+    function updateRatesAndPreview() {
+      rates.twd = parseFloat(rateTwdInput.value) || 0;
+      rates.hkd = parseFloat(rateHkdInput.value) || 0;
+      localStorage.setItem(STORAGE_RATES, JSON.stringify(rates));
+
+      const jpy = parseFloat(calcJpyInput.value) || 0;
+      previewTwd.textContent = `NT$ ${Math.round(jpy * rates.twd).toLocaleString()}`;
+      previewHkd.textContent = `HK$ ${(jpy * rates.hkd).toFixed(1)}`;
+      renderExpenses();
+    }
+
+    rateTwdInput.addEventListener("input", updateRatesAndPreview);
+    rateHkdInput.addEventListener("input", updateRatesAndPreview);
+    calcJpyInput.addEventListener("input", updateRatesAndPreview);
+
+    let expenses = JSON.parse(localStorage.getItem(STORAGE_EXPENSES)) || [];
+
+    function renderExpenses() {
+      const listEl = document.getElementById("expenseList");
+      let sumJpy = 0;
+
+      if (expenses.length === 0) {
+        listEl.innerHTML = `<li style="text-align:center; color:#8C6D5E; padding:14px 0; font-size:0.88rem;">尚未有消費紀錄，快記下第一筆吧！</li>`;
+      } else {
+        listEl.innerHTML = expenses.map((item, idx) => {
+          sumJpy += item.amount;
+          const twd = Math.round(item.amount * rates.twd).toLocaleString();
+          const hkd = (item.amount * rates.hkd).toFixed(1);
+          return `
+            <li class="expense-item">
+              <div class="exp-info">
+                <strong>${item.title}</strong>
+                <small>${item.day}・${item.cat}</small>
+              </div>
+              <div style="display:flex; align-items:center;">
+                <div class="exp-amount">
+                  <span>¥${item.amount.toLocaleString()}</span>
+                  <small>NT$${twd} / HK$${hkd}</small>
+                </div>
+                <button class="btn-del" onclick="deleteExpense(${idx})">刪除</button>
+              </div>
+            </li>
+          `;
+        }).join("");
+      }
+
+      document.getElementById("totalJpy").textContent = `¥${sumJpy.toLocaleString()}`;
+      document.getElementById("totalTwd").textContent = `NT$${Math.round(sumJpy * rates.twd).toLocaleString()}`;
+      document.getElementById("totalHkd").textContent = `HK$${(sumJpy * rates.hkd).toFixed(1)}`;
+    }
+
+    document.getElementById("addExpenseBtn").addEventListener("click", () => {
+      const day = document.getElementById("expDay").value;
+      const cat = document.getElementById("expCat").value;
+      const title = document.getElementById("expTitle").value.trim();
+      const amount = parseFloat(document.getElementById("expAmount").value);
+
+      if (!title || isNaN(amount) || amount <= 0) {
+        alert("請輸入消費項目名稱與正確的日幣金額！");
+        return;
+      }
+
+      expenses.unshift({ day, cat, title, amount });
+      localStorage.setItem(STORAGE_EXPENSES, JSON.stringify(expenses));
+      document.getElementById("expTitle").value = "";
+      document.getElementById("expAmount").value = "";
+      renderExpenses();
+    });
+
+    window.deleteExpense = function(idx) {
+      expenses.splice(idx, 1);
+      localStorage.setItem(STORAGE_EXPENSES, JSON.stringify(expenses));
+      renderExpenses();
+    };
+
+    renderExpenses();
+
+    // ==================== 5. 行前清單 Checklist (LocalStorage: kansai27.checks) ====================
+    const defaultChecklist = [
+      { id: "doc1", group: "📄 重要證件與預約憑證", text: "護照正本（有效期 6 個月以上）& Visit Japan Web QR Code", checked: false },
+      { id: "doc2", group: "📄 重要證件與預約憑證", text: "白川鄉高速巴士預約憑證（11/✱✱ 往返指定席）", checked: false },
+      { id: "doc3", group: "📄 重要證件與預約憑證", text: "立山黑部室堂票券 & 21世紀美術館泳池展區預約", checked: false },
+      { id: "doc4", group: "📄 重要證件與預約憑證", text: "日元現金（近江町市場、小吃攤使用）& 海外信用卡", checked: false },
+      { id: "snow1", group: "❄️ Day 2 立山黑部室堂極寒裝備", text: "防風防水厚羽絨外套 / 衝鋒衣（海拔 2,450m 零下強風）", checked: false },
+      { id: "snow2", group: "❄️ Day 2 立山黑部室堂極寒裝備", text: "極暖發熱衣、毛帽、防風觸控手套、保暖圍巾", checked: false },
+      { id: "snow3", group: "❄️ Day 2 立山黑部室堂極寒裝備", text: "防滑防水健行鞋 / 抓地力佳運動鞋 & 厚羊毛襪", checked: false },
+      { id: "snow4", group: "❄️ Day 2 立山黑部室堂極寒裝備", text: "貼身暖包 & 太陽眼鏡（防雪地強烈反光）", checked: false },
+      { id: "city1", group: "🍁 平地秋遊與隨身小物", text: "防風輕便外套、長袖上衣與好走休閒鞋（兼六園、茶屋街）", checked: false },
+      { id: "city2", group: "🍁 平地秋遊與隨身小物", text: "折疊防風雨傘（北陸秋冬多陰雨）& 隨身保溫瓶", checked: false },
+      { id: "city3", group: "🍁 平地秋遊與隨身小物", text: "日本 eSIM / SIM 卡、大容量行動電源（低溫掉電極快）", checked: false },
+      { id: "city4", group: "🍁 平地秋遊與隨身小物", text: "暈車藥（山路巴士）、常備感冒腸胃藥 & 高保濕潤唇膏護手霜", checked: false }
+    ];
+
+    let checklistState = JSON.parse(localStorage.getItem(STORAGE_CHECKS)) || defaultChecklist;
+
+    function saveAndRenderChecklist() {
+      localStorage.setItem(STORAGE_CHECKS, JSON.stringify(checklistState));
+      const container = document.getElementById("checklistContainer");
+
+      const groups = [...new Set(checklistState.map(i => i.group))];
+      container.innerHTML = groups.map(grp => {
+        const itemsHtml = checklistState
+          .map((item, index) => ({ ...item, index }))
+          .filter(item => item.group === grp)
+          .map(item => `
+            <div class="check-item ${item.checked ? "checked" : ""}" onclick="toggleCheck(${item.index})">
+              <input type="checkbox" id="chk_${item.index}" ${item.checked ? "checked" : ""} onclick="event.stopPropagation(); toggleCheck(${item.index})" />
+              <label for="chk_${item.index}">${item.text}</label>
+            </div>
+          `).join("");
+
+        return `<div class="checklist-group-title">${grp}</div>${itemsHtml}`;
+      }).join("");
+
+      const doneCount = checklistState.filter(i => i.checked).length;
+      const totalCount = checklistState.length;
+      document.getElementById("checkProgressText").textContent = `${doneCount} / ${totalCount} 完成`;
+      const pct = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
+      document.getElementById("checkProgressBar").style.width = `${pct}%`;
+    }
+
+    window.toggleCheck = function(index) {
+      checklistState[index].checked = !checklistState[index].checked;
+      saveAndRenderChecklist();
+    };
+
+    document.getElementById("addCheckBtn").addEventListener("click", () => {
+      const input = document.getElementById("newCheckInput");
+      const val = input.value.trim();
+      if (!val) return;
+      checklistState.push({
+        id: "custom_" + Date.now(),
+        group: "✨ 自訂補充清單",
+        text: val,
+        checked: false
+      });
+      input.value = "";
+      saveAndRenderChecklist();
+    });
+
+    saveAndRenderChecklist();
+  </script>
+</body>
+</html>
