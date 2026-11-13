@@ -1,6 +1,6 @@
 {
   "name": "travel-eye",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "description": "旅行手帳 — a Japanese stationery-style travel notebook. One trip, one HTML page.",

@@ -1,8 +1,8 @@
 # Handoff — travel-eye ・ 旅行手帳
 
-Prepared 2026-11-13. Current release: **v1.0** (`400b26d`). This document is for whoever picks the project up next — human or AI.
+Prepared 2026-11-13. Current release: **v1.1** (annotated tag on `main`). This document is for whoever picks the project up next — human or AI.
 
-> The publish flow (`tools/publish.mjs`, the browser 發布 panel, `docs/trips.json`) landed after `v1.0`; it is on `main` but not part of the tagged release.
+> **v1.1 adds** the publish flow: `tools/publish.mjs`, the browser 發布到網站 panel backed by `docs/trips.json`, and the **📂 從裝置選擇 HTML** file picker in the workbench.
 
 ---
 
@@ -15,7 +15,8 @@ Prepared 2026-11-13. Current release: **v1.0** (`400b26d`). This document is for
 | Vercel | Repo is deploy-ready (`vercel.json`). The literal `travel-eye.vercel.app` belongs to **another team's unrelated project** — use your own project URL. |
 | Stack | Plain static HTML. No framework, no dependencies, no build step for the site itself. |
 | Content language | Traditional Chinese; Japanese stationery / scrapbook visual language. |
-| Tag | `v1.0` → `400b26d` (annotated) |
+| Tag | `v1.1` → this commit (annotated) |
+| Previous tag | `v1.0` → `400b26d` (initial masked site + workbench) |
 
 The model is **one trip = one HTML file**, plus a landing page that lists trips as cards.
 
@@ -35,7 +36,7 @@ The model is **one trip = one HTML file**, plus a landing page that lists trips 
 | `mask.local.json` | Your private redactions (names, hotels, refs) | **No** — git-ignored |
 | `vercel.json` | `outputDirectory: docs`, no build | Yes |
 | `.vercelignore` | Blocks raw pages from CLI uploads | Yes |
-| `package.json` | `mask` / `check` / `dev` / `publish` scripts, version 1.0.0 | Yes |
+| `package.json` | `mask` / `check` / `dev` / `publish` scripts, version 1.1.0 | Yes |
 | `README.md` | User-facing docs | Yes |
 
 > **Critical:** the real, unmasked pages are **not in the repository**. A fresh clone only contains `docs/`. To edit content you need the root `index.html` / trip pages from the owner, or you will be editing masked copies by hand (don’t).
@@ -235,14 +236,16 @@ Storage is per origin: the local file, GitHub Pages and Vercel each have separat
 
 ---
 
-## Verified state at v1.0
+## Verified state at v1.1
 
 - `npm run check` passes; 29 values masked; no raw dates/flights/emails in `docs/` or `docs/trips.json`.
-- GitHub Pages serves both pages (200) and they render masked content.
+- GitHub Pages serves both pages (200) and they render masked content; `trips.json` returns 200.
 - Headless-browser check: landing renders, prompt box loads the 40-line template, no console errors.
 - Landing hero is `旅の記録` with no hardcoded year.
 - Vercel config validated against the official schema; simulated static hosting of `docs/` returns 200 on `/`, `/index.html`, `/sendai-2026.html`.
 - Publish flow smoke-tested with a throwaway page: `--dry-run` printed the card without writing; the real run added the card, masked the page, produced `docs/<file>` and committed only the expected files. The test commit and files were removed afterwards.
+- Device file picker tested in real Chrome over the DevTools protocol: selecting a file filled the textarea, set the filename to the file's own name, parsed the `trip:*` tags and enabled both buttons.
+  `{"codeLength":467,"filename":"_picktest.html","status":"已讀取：2030 關西 6日5夜 · 大阪・京都・奈良 · 2030.06.14 – 06.19","saveDisabled":false,"publishDisabled":false}`
 
 ---
 
@@ -266,7 +269,7 @@ Storage is per origin: the local file, GitHub Pages and Vercel each have separat
 
 - Add an `--audit` mode to `tools/mask.mjs` that scans only `docs/`, so CI can run without the raw pages.
 - Add a GitHub Actions workflow: `npm run audit` on push/PR.
-- Optionally publish a GitHub Release from tag `v1.0`.
+- Optionally publish a GitHub Release from tag `v1.1`.
 - Optional custom domain (Pages and/or Vercel).
 - If the old commit exposure matters: GitHub Support purge, or delete/recreate the repo.
 
