@@ -1,5 +1,24 @@
 [
   {
+    "id": "p-sendai26",
+    "title": "2026 東北初冬 8日7夜",
+    "destination": "仙台・青森・山形",
+    "ghost": "仙台",
+    "start": "2026-11-✱✱",
+    "end": "2026-12-✱✱",
+    "days": 8,
+    "nights": 7,
+    "dateLabel": "2026.11.✱✱ – 12.✱✱",
+    "desc": "初冬雪原、牛舌與蘋果批之旅。",
+    "emoji": "❄️",
+    "theme": "matcha",
+    "href": "sendai26.html",
+    "tags": [
+      "自訂旅程"
+    ],
+    "added": 1795338472070
+  },
+  {
     "id": "p-trip-2026-10",
     "title": "哆啦A夢的北陸 6天5夜冒險地圖",
     "destination": "金澤・立山黑部・高岡・白川鄉",
