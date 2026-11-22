@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>2026 東北初冬 8日7夜｜旅程手帳</title>
+
+  <!-- 首頁自動登記 Meta -->
+  <meta name="trip:title" content="2026 東北初冬 8日7夜">
+  <meta name="trip:destination" content="仙台・青森・山形">
+  <meta name="trip:start" content="2026-11-✱✱">
+  <meta name="trip:end" content="2026-12-✱✱">
+  <meta name="trip:emoji" content="❄️">
+  <meta name="trip:theme" content="matcha">
+  <meta name="trip:desc" content="初冬雪原、牛舌與蘋果批之旅。">
+
+  <!-- Google Fonts: Noto Sans TC & Zen Maru Gothic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-paper: #FAF6EC;
+      --grid-line: rgba(92, 64, 51, 0.065);
+      --primary: #5C4033;
+      --primary-light: #8A6B5C;
+      --pink: #E8989A;
+      --pink-soft: rgba(232, 152, 154, 0.22);
+      --matcha: #7A9A7E;
+      --matcha-soft: rgba(122, 154, 126, 0.22);
+      --card-bg: #FFFDF8;
+      --border-dashed: rgba(92, 64, 51, 0.28);
+      --shadow-soft: 0 4px 14px rgba(92, 64, 51, 0.08);
+      --font-display: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
+      --font-body: 'Noto Sans TC', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0 0 86px 0;
+      background-color: var(--bg-paper);
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 20px 20px;
+      color: var(--primary);
+      font-family: var(--font-body);
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    /* 頂部返回連結列 */
+    .top-nav-bar {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 12px 16px 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .trip-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: var(--primary);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.88rem;
+      background: rgba(255, 253, 248, 0.88);
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px dashed var(--border-dashed);
+      box-shadow: 0 2px 6px rgba(92, 64, 51, 0.05);
+      transition: transform 0.15s ease;
+    }
+
+    .trip-back:active {
+      transform: scale(0.96);
+    }
+
+    .notebook-badge {
+      font-family: var(--font-display);
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--matcha);
+      background: var(--matcha-soft);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    /* 主容器 */
+    .app-container {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 6px 14px 20px;
+    }
+
+    /* 日式車票 / 登機證頂部標題卡 */
+    .ticket-header {
+      position: relative;
+      background: var(--card-bg);
+      border: 2px solid var(--primary);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin: 8px 0 14px;
+      box-shadow: 4px 4px 0px rgba(92, 64, 51, 0.14);
+      overflow: hidden;
+    }
+
+    .ticket-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--matcha),
+        var(--matcha) 10px,
+        var(--pink) 10px,
+        var(--pink) 20px
+      );
+    }
+
+    .ticket-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--primary-light);
+    }
+
+    .ticket-code {
+      background: var(--primary);
+      color: var(--bg-paper);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+    }
+
+    .ticket-title {
+      font-family: var(--font-display);
+      font-size: 1.38rem;
+      font-weight: 900;
+      margin: 6px 0 4px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ticket-route {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #F5EFE0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      margin: 10px 0;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .ticket-route span.airport {
+      font-size: 1.08rem;
+      font-weight: 900;
+    }
+
+    .ticket-divider {
+      position: relative;
+      border-top: 2px dashed var(--border-dashed);
+      margin: 12px -18px 10px;
+    }
+
+    .ticket-divider::before,
+    .ticket-divider::after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      width: 18px;
+      height: 18px;
+      background: var(--bg-paper);
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+    }
+
+    .ticket-divider::before {
+      left: -11px;
+    }
+
+    .ticket-divider::after {
+      right: -11px;
+    }
+
+    .ticket-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--primary-light);
+      font-weight: 500;
+    }
+
+    /* Sticky Day 1 ~ Day 8 橫向滑動頁籤 */
+    .day-tabs-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(250, 246, 236, 0.94);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      margin: 0 -14px 16px;
+      padding: 8px 14px;
+      border-bottom: 1px dashed var(--border-dashed);
+    }
+
+    .day-tabs-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 2px;
+    }
+
+    .day-tabs-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .day-tab-btn {
+      flex: 0 0 auto;
+      border: 1.5px solid var(--primary);
+      background: var(--card-bg);
+      color: var(--primary);
+      border-radius: 12px;
+      padding: 6px 12px;
+      font-family: var(--font-display);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 66px;
+      transition: all 0.18s ease;
+    }
+
+    .day-tab-btn .d-num {
+      font-size: 0.82rem;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .day-tab-btn .d-date {
+      font-size: 0.68rem;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    .day-tab-btn.active {
+      background: var(--primary);
+      color: var(--bg-paper);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(92, 64, 51, 0.22);
+    }
+
+    /* 分頁切換控制 */
+    .tab-page {
+      display: none;
+      animation: fadeIn 0.22s ease;
+    }
+
+    .tab-page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 每日行程區塊 */
+    .day-section {
+      scroll-margin-top: 68px;
+      margin-bottom: 26px;
+    }
+
+    .day-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, rgba(122, 154, 126, 0.22), rgba(232, 152, 154, 0.18));
+      border-left: 5px solid var(--matcha);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+    }
+
+    .day-banner-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .day-banner-date {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--primary-light);
+    }
+
+    .day-banner-title {
+      font-family: var(--font-display);
+      font-size: 1.12rem;
+      font-weight: 900;
+      color: var(--primary);
+    }
+
+    .day-weather-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--card-bg);
+      border: 1px solid var(--border-dashed);
+      padding: 4px 9px;
+      border-radius: 999px;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    /* 手帳卡片 + 半透明紙膠帶 Washi Tape */
+    .spot-card {
+      position: relative;
+      background: var(--card-bg);
+      border: 1.5px solid rgba(92, 64, 51, 0.2);
+      border-radius: 14px;
+      padding: 16px 15px 14px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* 紙膠帶 CSS 效果 */
+    .washi-tape {
+      position: absolute;
+      top: -9px;
+      left: 18px;
+      width: 74px;
+      height: 18px;
+      background-color: rgba(232, 152, 154, 0.55);
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 5px,
+        rgba(255, 255, 255, 0.35) 5px,
+        rgba(255, 255, 255, 0.35) 10px
+      );
+      transform: rotate(-3.5deg);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border-left: 1px dotted rgba(255,255,255,0.6);
+      border-right: 1px dotted rgba(255,255,255,0.6);
+      pointer-events: none;
+    }
+
+    .spot-card:nth-child(even) .washi-tape {
+      background-color: rgba(122, 154, 126, 0.52);
+      background-image: radial-gradient(rgba(255, 255, 255, 0.45) 1.5px, transparent 1.5px);
+      background-size: 8px 8px;
+      transform: rotate(2.8deg);
+      left: 24px;
+    }
+
+    /* 右上角圓形日式紀念印章 Stamp */
+    .jp-stamp {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #C84B31;
+      color: #C84B31;
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.05;
+      transform: rotate(12deg);
+      opacity: 0.85;
+      box-shadow: inset 0 0 0 1.5px rgba(200, 75, 49, 0.35);
+      background: rgba(200, 75, 49, 0.04);
+      user-select: none;
+    }
+
+    .jp-stamp.matcha {
+      border-color: #4F7754;
+      color: #4F7754;
+      box-shadow: inset 0 0 0 1.5px rgba(79, 119, 84, 0.35);
+      background: rgba(79, 119, 84, 0.05);
+      transform: rotate(-10deg);
+    }
+
+    .jp-stamp.brown {
+      border-color: #7A5230;
+      color: #7A5230;
+      box-shadow: inset 0 0 0 1.5px rgba(122, 82, 48, 0.35);
+      background: rgba(122, 82, 48, 0.05);
+      transform: rotate(8deg);
+    }
+
+    .card-meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-right: 48px;
+      margin-bottom: 6px;
+    }
+
+    .time-pill {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: #F2EAD8;
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .cat-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--matcha-soft);
+      color: #3E5C42;
+    }
+
+    .cat-tag.pink {
+      background: var(--pink-soft);
+      color: #9E4749;
+    }
+
+    .booked-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: #D9534F;
+      color: #FFF;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .spot-title {
+      font-family: var(--font-display);
+      font-size: 1.04rem;
+      font-weight: 900;
+      margin: 4px 0 6px;
+      padding-right: 44px;
+      color: var(--primary);
+    }
+
+    .spot-note {
+      font-size: 0.86rem;
+      color: #6B5347;
+      background: #FAF6EC;
+      border-left: 3px solid var(--pink);
+      padding: 6px 10px;
+      border-radius: 0 8px 8px 0;
+      margin: 6px 0 10px;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .maps-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
+      background: var(--primary);
+      color: #FFFDF8;
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(92, 64, 51, 0.2);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .maps-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* 分頁二：匯率與記帳 */
+    .section-card {
+      position: relative;
+      background: var(--card-bg);
+      border: 1.5px solid rgba(92, 64, 51, 0.22);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 900;
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+    }
+
+    .rate-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-group label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--primary-light);
+    }
+
+    .input-field, .select-field {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1.5px solid rgba(92, 64, 51, 0.28);
+      border-radius: 10px;
+      background: #FAF6EC;
+      color: var(--primary);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .input-field:focus, .select-field:focus {
+      border-color: var(--matcha);
+      background: #FFF;
+    }
+
+    .converted-boxes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .conv-box {
+      background: #F4EDE0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      text-align: center;
+      border: 1px dashed var(--border-dashed);
+    }
+
+    .conv-box .curr-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--primary-light);
+    }
+
+    .conv-box .curr-val {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--primary);
+      margin-top: 2px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 12px;
+      background: var(--matcha);
+      color: #FFF;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 3px 8px rgba(122, 154, 126, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .expense-summary-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--pink-soft);
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .expense-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .expense-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 4px;
+      border-bottom: 1px dashed var(--border-dashed);
+      gap: 8px;
+    }
+
+    .expense-item:last-child {
+      border-bottom: none;
+    }
+
+    .exp-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .exp-name {
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .exp-sub {
+      font-size: 0.75rem;
+      color: var(--primary-light);
+    }
+
+    .exp-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .exp-jpy {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 0.95rem;
+    }
+
+    .exp-conv {
+      font-size: 0.72rem;
+      color: var(--primary-light);
+    }
+
+    .del-btn {
+      border: none;
+      background: rgba(232, 152, 154, 0.28);
+      color: #9E4749;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 分頁三：行前清單 */
+    .checklist-progress {
+      background: #F4EDE0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      height: 10px;
+      background: rgba(92, 64, 51, 0.14);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--matcha), var(--pink));
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    .check-cat-title {
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 900;
+      color: var(--matcha);
+      margin: 14px 0 8px;
+      padding-bottom: 4px;
+      border-bottom: 1.5px solid var(--matcha-soft);
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 10px;
+      background: #FAF6EC;
+      border-radius: 10px;
+      margin-bottom: 7px;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+
+    .check-item.checked {
+      opacity: 0.58;
+    }
+
+    .check-item.checked span.item-text {
+      text-decoration: line-through;
+    }
+
+    .check-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .check-left input[type="checkbox"] {
+      width: 19px;
+      height: 19px;
+      accent-color: var(--matcha);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .add-check-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn-add-small {
+      background: var(--primary);
+      color: #FFF;
+      border: none;
+      border-radius: 10px;
+      padding: 0 14px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* 底部固定導覽列 Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: rgba(255, 253, 248, 0.96);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-top: 2px solid var(--primary);
+      display: flex;
+      justify-content: space-around;
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 14px rgba(92, 64, 51, 0.08);
+    }
+
+    .nav-item {
+      flex: 1;
+      max-width: 160px;
+      border: none;
+      background: transparent;
+      color: var(--primary-light);
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 4px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      transition: all 0.18s ease;
+    }
+
+    .nav-item .nav-icon {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      background: var(--matcha-soft);
+      color: var(--primary);
+      font-weight: 900;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部返回首頁連結 -->
+  <div class="top-nav-bar">
+    <a class="trip-back" href="index.html">← 旅程手帳</a>
+    <span class="notebook-badge">❄️ TOHOKU 2026</span>
+  </div>
+
+  <div class="app-container">
+
+    <!-- ==================== 分頁 1：每日行程 ==================== -->
+    <div id="page-itinerary" class="tab-page active">
+
+      <!-- 日式車票 / 登機證頂部標題 -->
+      <header class="ticket-header">
+        <div class="ticket-top-row">
+          <span>JAPAN TOHOKU WINTER PASS</span>
+          <span class="ticket-code">8 DAYS / 7 NIGHTS</span>
+        </div>
+        <h1 class="ticket-title">❄️ 2026 東北初冬 8日7夜</h1>
+        <div class="ticket-route">
+          <span class="airport">HKG 香港</span>
+          <span>✈️ UO ✱✱✱ / UO ✱✱✱</span>
+          <span class="airport">SDJ 仙台</span>
+        </div>
+        <div class="ticket-divider"></div>
+        <div class="ticket-meta">
+          <span>📅 2026.11.✱✱ (六) — 12.✱✱ (六)</span>
+          <span>📍 仙台・青森・山形</span>
+        </div>
+      </header>
+
+      <!-- 頂部固定 Day 1 ~ Day 8 橫向滑動頁籤 -->
+      <nav class="day-tabs-sticky" aria-label="行程天數導覽">
+        <div class="day-tabs-scroll" id="dayTabsContainer"></div>
+      </nav>
+
+      <!-- 每日行程卡片容器 -->
+      <main id="itineraryContainer"></main>
+    </div>
+
+    <!-- ==================== 分頁 2：匯率與記帳 ==================== -->
+    <div id="page-expense" class="tab-page">
+      <div class="section-card">
+        <div class="washi-tape"></div>
+        <h2 class="section-heading">💴 即時匯率換算器</h2>
+        <div class="rate-grid">
+          <div class="input-group">
+            <label for="rateTwd">1 JPY 兌 台幣 (TWD)</label>
+            <input type="number" id="rateTwd" class="input-field" step="0.0001" placeholder="0.215">
+          </div>
+          <div class="input-group">
+            <label for="rateHkd">1 JPY 兌 港幣 (HKD)</label>
+            <input type="number" id="rateHkd" class="input-field" step="0.0001" placeholder="0.052">
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="calcJpy">輸入日幣金額 (JPY ¥)</label>
+          <input type="number" id="calcJpy" class="input-field" placeholder="例如：3500" inputmode="decimal">
+        </div>
+        <div class="converted-boxes">
+          <div class="conv-box">
+            <div class="curr-label">約合台幣 (TWD)</div>
+            <div class="curr-val" id="resTwd">NT$ 0</div>
+          </div>
+          <div class="conv-box">
+            <div class="curr-label">約合港幣 (HKD)</div>
+            <div class="curr-val" id="resHkd">HK$ 0.0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="washi-tape"></div>
+        <h2 class="section-heading">🧾 旅行記帳本</h2>
+        <div class="rate-grid">
+          <div class="input-group">
+            <label for="expDay">日期</label>
+            <select id="expDay" class="select-field">
+              <option value="Day 1 (11/✱✱)">Day 1 (11/✱✱)</option>
+              <option value="Day 2 (11/✱✱)">Day 2 (11/✱✱)</option>
+              <option value="Day 3 (11/✱✱)">Day 3 (11/✱✱)</option>
+              <option value="Day 4 (12/✱✱)">Day 4 (12/✱✱)</option>
+              <option value="Day 5 (12/✱✱)">Day 5 (12/✱✱)</option>
+              <option value="Day 6 (12/✱✱)">Day 6 (12/✱✱)</option>
+              <option value="Day 7 (12/✱✱)">Day 7 (12/✱✱)</option>
+              <option value="Day 8 (12/✱✱)">Day 8 (12/✱✱)</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="expCat">分類</label>
+            <select id="expCat" class="select-field">
+              <option value="🍜 餐飲">🍜 餐飲</option>
+              <option value="🚆 交通">🚆 交通</option>
+              <option value="🛍️ 購物">🛍️ 購物</option>
+              <option value="🎟️ 門票">🎟️ 門票</option>
+              <option value="🏨 住宿">🏨 住宿</option>
+            </select>
+          </div>
+        </div>
+        <div class="rate-grid">
+          <div class="input-group">
+            <label for="expTitle">消費項目</label>
+            <input type="text" id="expTitle" class="input-field" placeholder="例如：善治郎牛舌">
+          </div>
+          <div class="input-group">
+            <label for="expAmount">日幣金額 (¥)</label>
+            <input type="number" id="expAmount" class="input-field" placeholder="2800" inputmode="decimal">
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="addExpenseBtn">＋ 加入記帳紀錄</button>
+      </div>
+
+      <div class="section-card">
+        <div class="expense-summary-bar">
+          <span>累計總花費</span>
+          <span id="totalExpenseDisplay">¥0 (HK$0 / NT$0)</span>
+        </div>
+        <ul class="expense-list" id="expenseList"></ul>
+      </div>
+    </div>
+
+    <!-- ==================== 分頁 3：行前清單 ==================== -->
+    <div id="page-checklist" class="tab-page">
+      <div class="section-card">
+        <div class="washi-tape"></div>
+        <h2 class="section-heading">🎒 東北初冬行前清單</h2>
+        <div class="checklist-progress">
+          <div class="progress-top">
+            <span>準備進度</span>
+            <span id="checkProgressText">0 / 0 完成</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="checkProgressFill"></div>
+          </div>
+        </div>
+
+        <div id="checklistContainer"></div>
+
+        <div class="add-check-row">
+          <input type="text" id="newCheckInput" class="input-field" placeholder="新增自訂物品（例如：暖包）">
+          <button type="button" class="btn-add-small" id="addCheckBtn">＋ 新增</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 底部固定導覽列 -->
+  <nav class="bottom-nav" aria-label="主功能導覽">
+    <button type="button" class="nav-item active" data-target="page-itinerary">
+      <span class="nav-icon">📅</span>
+      <span>每日行程</span>
+    </button>
+    <button type="button" class="nav-item" data-target="page-expense">
+      <span class="nav-icon">💴</span>
+      <span>匯率與記帳</span>
+    </button>
+    <button type="button" class="nav-item" data-target="page-checklist">
+      <span class="nav-icon">🎒</span>
+      <span>行前清單</span>
+    </button>
+  </nav>
+
+  <script>
+    // ==================== 完整行程資料 ====================
+    const TRIP_DAYS = [
+      {
+        day: 1,
+        date: "11/✱✱ (六)",
+        shortDate: "11/✱✱",
+        title: "抵達仙台",
+        weather: "🌤️ 仙台 2°C~9°C",
+        items: [
+          {
+            time: "09:00 - 14:05",
+            category: "✈️ 航班",
+            title: "乘搭 HK Express (UO ✱✱✱) 香港飛往仙台",
+            note: "建議起飛前 2.5 小時抵達香港國際機場辦理登機；機上備好外套準備落機。",
+            stamp: "出發",
+            stampColor: "pink",
+            mapQuery: "仙台空港"
+          },
+          {
+            time: "交通",
+            category: "🚆 鐵路",
+            title: "仙台機場 ➡️ 仙台站（約 25 分鐘）",
+            note: "乘搭仙台機場Access線直達 JR 仙台站，可使用 Suica / ICOCA 拍卡入閘。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "仙台駅"
+          },
+          {
+            time: "住宿",
+            category: "🏨 飯店",
+            title: "大和 ROYNET 飯店 仙台西口 PREMIER",
+            note: "位於仙台站西口步行範圍，先辦理 Check-in 放下行李。",
+            stamp: "住宿",
+            stampColor: "brown",
+            mapQuery: "ダイワロイネットホテル仙台西口 PREMIER"
+          },
+          {
+            time: "任務",
+            category: "🎟️ 票券",
+            title: "領取 / 購買 JR Pass",
+            note: "前往仙台站 JR 東日本旅行服務中心（View Plaza）兌換周遊券並劃位指定席。",
+            stamp: "必辦",
+            stampColor: "pink",
+            mapQuery: "JR東日本旅行サービスセンター 仙台駅"
+          },
+          {
+            time: "晚餐",
+            category: "🥩 美食",
+            title: "名物炭燒牛舌（善治郎 / 利久 / 司）",
+            note: "抵達東北第一餐！仙台站牛舌通或周邊分店熱門時段需排隊，建議提早前往。",
+            stamp: "必吃",
+            stampColor: "pink",
+            mapQuery: "たんや善治郎 仙台駅牛たん通り店"
+          }
+        ]
+      },
+      {
+        day: 2,
+        date: "11/✱✱ (日)",
+        shortDate: "11/✱✱",
+        title: "青森市區",
+        weather: "❄️ 青森 -1°C~5°C",
+        items: [
+          {
+            time: "09:50 - 11:16",
+            category: "🚆 新幹線",
+            booked: true,
+            title: "仙台 ➡️ 新青森（新幹線）",
+            note: "【已預訂】請預留時間於仙台站買駅弁或咖啡上車享用。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "新青森駅"
+          },
+          {
+            time: "11:26 - 11:32",
+            category: "🚆 轉乘",
+            title: "新青森 ➡️ 青森站",
+            note: "轉乘 JR 奧羽本線僅需 6 分鐘即達青森市中心。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "青森駅"
+          },
+          {
+            time: "住宿",
+            category: "🏨 飯店",
+            title: "ReLabo Medical Spa & Stay",
+            note: "與青森站共構的溫泉養生飯店，交通極為便利，先寄存行李。",
+            stamp: "住宿",
+            stampColor: "brown",
+            mapQuery: "ReLabo Medical Spa & Stay 青森"
+          },
+          {
+            time: "購物",
+            category: "🍎 手信",
+            title: "A-FACTORY 買蘋果手信",
+            note: "青森站旁海濱複合設施，必試現榨蘋果汁、蘋果氣泡酒及各款蘋果批伴手禮。",
+            stamp: "必買",
+            stampColor: "pink",
+            mapQuery: "A-FACTORY 青森"
+          },
+          {
+            time: "景點",
+            category: "🏮 觀光",
+            title: "睡魔之家 WA・RASSE、ASPAM 觀光物產館",
+            note: "近距離欣賞震撼的大型睡魔燈籠，再到三角形建築 ASPAM 俯瞰陸奧灣。",
+            stamp: "打卡",
+            stampColor: "matcha",
+            mapQuery: "ねぶたの家 ワ・ラッセ"
+          },
+          {
+            time: "20:00",
+            category: "🍢 晚餐",
+            booked: true,
+            title: "炉端とおでん 呼炉来 青森駅前店",
+            note: "【已預訂 20:00】寒冷冬夜享用熱騰騰關東煮與炉端燒料理。",
+            stamp: "必吃",
+            stampColor: "pink",
+            mapQuery: "炉端とおでん 呼炉来 青森駅前店"
+          }
+        ]
+      },
+      {
+        day: 3,
+        date: "11/✱✱ (一)",
+        shortDate: "11/✱✱",
+        title: "八甲田山",
+        weather: "🌨️ 山區 -6°C~0°C",
+        items: [
+          {
+            time: "出發前",
+            category: "⚠️ 注意",
+            title: "出發前 Check 官網確認纜車運行狀況",
+            note: "八甲田山冬季風雪較大，清晨務必先查看八甲田纜車官網公告是否正常營運。",
+            stamp: "重要",
+            stampColor: "pink",
+            mapQuery: "八甲田ロープウェー"
+          },
+          {
+            time: "08:10 - 09:10",
+            category: "🚌 巴士",
+            booked: true,
+            title: "青森站 11 號巴士站 ➡️ 搭 JR 巴士「八甲田號」上山",
+            note: "【已預訂】請提前 10-15 分鐘抵達青森站前 11 號乘車處候車。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "青森駅バス乗り場"
+          },
+          {
+            time: "上午",
+            category: "🚠 絕景",
+            title: "乘搭八甲田纜車上山頂公園，賞初冬雪原與樹掛霧冰",
+            note: "山頂氣溫極低且風大，務必穿戴防風羽絨、冷帽、手套及防滑靴。",
+            stamp: "打卡",
+            stampColor: "matcha",
+            mapQuery: "八甲田ロープウェー 山頂公園駅"
+          },
+          {
+            time: "午餐",
+            category: "🍲 休息",
+            title: "山麓站室內休息＋午餐",
+            note: "下山後在山麓站食堂暖身享用熱食，留意回程巴士發車時間。",
+            stamp: "補給",
+            stampColor: "brown",
+            mapQuery: "八甲田ロープウェー 山麓駅"
+          },
+          {
+            time: "13:43 - 14:58",
+            category: "🚌 巴士",
+            title: "搭 JR 巴士「八甲田號」下山 ➡️ 青森站",
+            note: "返回青森市區，視乎體力彈性安排下午行程。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "青森駅"
+          },
+          {
+            time: "購物",
+            category: "🍎 手信",
+            title: "A-FACTORY 買蘋果手信",
+            note: "補貨青森蘋果乾、蘋果年輪蛋糕及限定零食。",
+            stamp: "必買",
+            stampColor: "pink",
+            mapQuery: "A-FACTORY 青森"
+          },
+          {
+            time: "景點",
+            category: "🏮 觀光",
+            title: "睡魔之家 WA・RASSE、ASPAM 觀光物產館",
+            note: "若 Day 2 未逛完可於此時段補完，或到海邊散步欣賞黃昏海景。",
+            stamp: "打卡",
+            stampColor: "matcha",
+            mapQuery: "青森県観光物産館アスパム"
+          },
+          {
+            time: "晚餐",
+            category: "🍽️ 美食",
+            title: "青森市內晚餐",
+            note: "可選青森帆立貝料理、津輕拉麵或居酒屋鄉土料理。",
+            stamp: "必吃",
+            stampColor: "pink",
+            mapQuery: "青森駅 グルメ"
+          }
+        ]
+      },
+      {
+        day: 4,
+        date: "12/✱✱ (二)",
+        shortDate: "12/✱✱",
+        title: "八戶海鮮 ＋ 弘前散策",
+        weather: "❄️ 青森/弘前 -1°C~4°C",
+        items: [
+          {
+            time: "08:37 - 09:04",
+            category: "🚆 新幹線",
+            title: "新青森 ➡️ 八戶",
+            note: "搭乘新幹線前往太平洋側的八戶市。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "八戸駅"
+          },
+          {
+            time: "09:40 - 09:52",
+            category: "🚌 巴士",
+            title: "八戶 ➡️ 八食中心",
+            note: "於八戶站東口搭乘百円/兩百円接駁巴士直達八食中心。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "八食センター"
+          },
+          {
+            time: "10:00",
+            category: "🦀 美食",
+            title: "七厘村 海鮮 BBQ",
+            note: "先在市場自選新鮮帆立貝、海膽、大蝦、秋刀魚，再到七厘村炭火現烤！",
+            stamp: "必吃",
+            stampColor: "pink",
+            mapQuery: "八食センター 七厘村"
+          },
+          {
+            time: "13:00 - 13:12",
+            category: "🚌 巴士",
+            title: "八食中心 ➡️ 八戶",
+            note: "留意 13:00 班次準時返回八戶站。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "八戸駅"
+          },
+          {
+            time: "13:34 - 14:44",
+            category: "🚆 鐵路",
+            title: "八戶 (13:34) ➡️ 新青森 (13:57) ➡️ 弘前 (14:08-14:44)",
+            note: "於新青森站轉乘奧羽本線前往洋館與蘋果之城「弘前」。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "弘前駅"
+          },
+          {
+            time: "交通",
+            category: "🚌 巴士",
+            title: "弘前站外轉乘「土手町循環巴士」（單程 100円）",
+            note: "班次頻密，可輕鬆前往弘前公園及周邊歷史建築區。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "弘前駅前バスターミナル"
+          },
+          {
+            time: "景點",
+            category: "🏯 散策",
+            title: "弘前城（弘前公園）、睡魔村（聽三味線）、舊弘前圖書館、藤田紀念庭園",
+            note: "漫步明治大正風情洋館群，推薦到津輕藩睡魔村聆聽現場津輕三味線演奏。",
+            stamp: "打卡",
+            stampColor: "matcha",
+            mapQuery: "弘前公園"
+          },
+          {
+            time: "下午茶",
+            category: "🥧 甜點",
+            title: "大正浪漫喫茶室 / 市內法式餅店（弘前蘋果批）",
+            note: "藤田紀念庭園內的大正浪漫喫茶室人氣極高，可同時品嚐多款弘前名店蘋果批。",
+            stamp: "必吃",
+            stampColor: "pink",
+            mapQuery: "大正浪漫喫茶室 弘前"
+          },
+          {
+            time: "傍晚",
+            category: "✨ 夜景",
+            title: "弘前公園睇夜間著燈",
+            note: "欣賞入夜後打燈的弘前城天守與護城河冬日氛圍（注意保暖防滑）。",
+            stamp: "打卡",
+            stampColor: "matcha",
+            mapQuery: "弘前城"
+          },
+          {
+            time: "晚餐",
+            category: "🍽️ 美食",
+            title: "弘前市內晚餐",
+            note: "享用完晚餐後前往弘前站搭車返回青森。",
+            stamp: "補給",
+            stampColor: "brown",
+            mapQuery: "弘前駅 グルメ"
+          },
+          {
+            time: "20:31 或 21:40",
+            category: "🚆 鐵路",
+            title: "弘前 ➡️ 青森",
+            note: "搭乘 JR 奧羽本線返回青森站，車程約 40-45 分鐘。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "青森駅"
+          }
+        ]
+      },
+      {
+        day: 5,
+        date: "12/✱✱ (三)",
+        shortDate: "12/✱✱",
+        title: "返回仙台 ＋ 市區購物",
+        weather: "🌤️ 仙台 2°C~9°C",
+        items: [
+          {
+            time: "09:53 - 11:29",
+            category: "🚆 新幹線",
+            booked: true,
+            title: "新青森 ➡️ 仙台（新幹線）",
+            note: "【已預訂】告別青森，搭乘新幹線南下返回仙台（注意青森站出發接駁時間）。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "仙台駅"
+          },
+          {
+            time: "住宿",
+            category: "🏨 飯店",
+            title: "仙台東大都會大飯店",
+            note: "直通 JR 仙台站東口，先寄存行李再去享用午餐。",
+            stamp: "住宿",
+            stampColor: "brown",
+            mapQuery: "ホテルメトロポリタン仙台イースト"
+          },
+          {
+            time: "13:00",
+            category: "🍲 午餐",
+            title: "しゃぶ中 (和牛 Shabu-shabu)",
+            note: "品嚐入口即化的仙台和牛涮涮鍋午餐。",
+            stamp: "必吃",
+            stampColor: "pink",
+            mapQuery: "しゃぶ中 仙台"
+          },
+          {
+            time: "下午",
+            category: "🛍️ 購物",
+            title: "一番町商店街 / 藤崎百貨 (CELINE 等) / Disney Store",
+            note: "逛盡仙台最熱鬧的拱廊商店街與老牌藤崎百貨。",
+            stamp: "購物",
+            stampColor: "pink",
+            mapQuery: "藤崎百貨店 仙台"
+          },
+          {
+            time: "景點",
+            category: "⛩️ 歷史",
+            title: "瑞鳳殿 / 仙台城跡 (青葉城)",
+            note: "可乘搭觀光循環巴士「盧葡兒仙台 (Loople Sendai)」前往伊達政宗靈廟與青葉城跡。",
+            stamp: "打卡",
+            stampColor: "matcha",
+            mapQuery: "瑞鳳殿"
+          },
+          {
+            time: "傍晚",
+            category: "🌃 夜景",
+            title: "AER 大樓 31 樓（免費觀景台睇仙台夜景）",
+            note: "距離仙台站西口步行 2 分鐘，免費高空展望台一覽仙台市區與定禪寺通燈飾。",
+            stamp: "免費",
+            stampColor: "matcha",
+            mapQuery: "AER 展望テラス 仙台"
+          },
+          {
+            time: "晚餐",
+            category: "🍣 美食",
+            title: "魚米（Yodobashi 仙台）",
+            note: "平價高質迴轉壽司，順道可逛 Yodobashi Camera 電器及扭蛋區。",
+            stamp: "必吃",
+            stampColor: "pink",
+            mapQuery: "魚べい ヨドバシ仙台店"
+          }
+        ]
+      },
+      {
+        day: 6,
+        date: "12/✱✱ (四)",
+        shortDate: "12/✱✱",
+        title: "松島絕景 ＋ Outlet 掃貨",
+        weather: "☀️ 仙台 3°C~10°C",
+        items: [
+          {
+            time: "交通",
+            category: "🚆 鐵路",
+            title: "JR 仙台站 ➡️ 松島海岸站",
+            note: "搭乘 JR 仙石線約 40 分鐘抵達日本三景之一的松島。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "松島海岸駅"
+          },
+          {
+            time: "景點",
+            category: "⛩️ 絕景",
+            title: "參觀國寶瑞嚴寺、五大堂、行紅色福浦橋",
+            note: "沿海散步欣賞松島灣島嶼風光，順道可品嚐現烤松島生蠔與魚板。",
+            stamp: "打卡",
+            stampColor: "matcha",
+            mapQuery: "瑞巌寺"
+          },
+          {
+            time: "交通",
+            category: "🚆 鐵路",
+            title: "松島海岸站 ➡️ 中野榮站（約 22 分鐘）",
+            note: "搭乘 JR 仙石線往仙台方向於中野榮站下車，步行約 8 分鐘即達 Outlet。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "中野栄駅"
+          },
+          {
+            time: "購物",
+            category: "🛍️ 掃貨",
+            title: "三井 OUTLET PARK 仙台港 ＋ Workman 仙台港店",
+            note: "東北最大級 Outlet 盡情購物，別忘了到旁邊 Workman 入手高 CP 值防寒機能服飾！",
+            stamp: "必買",
+            stampColor: "pink",
+            mapQuery: "三井アウトレットパーク 仙台港"
+          },
+          {
+            time: "晚餐",
+            category: "🥩 美食",
+            title: "仙台市區燒肉",
+            note: "返回仙台站周邊大啖仙台牛燒肉慰勞雙腳。",
+            stamp: "必吃",
+            stampColor: "pink",
+            mapQuery: "仙台駅 焼肉"
+          }
+        ]
+      },
+      {
+        day: 7,
+        date: "12/✱✱ (五)",
+        shortDate: "12/✱✱",
+        title: "仙台朝市 ＋ 山形復古一日遊",
+        weather: "🌤️ 山形 1°C~8°C",
+        items: [
+          {
+            time: "早上",
+            category: "🍳 早餐",
+            title: "仙台朝市食早餐（海鮮、厚切玉子燒、生果）",
+            note: "被譽為「仙台人的廚房」，距離仙台站步行僅 5 分鐘，必食現煎厚切玉子燒與海鮮丼。",
+            stamp: "必吃",
+            stampColor: "pink",
+            mapQuery: "仙台朝市"
+          },
+          {
+            time: "交通",
+            category: "🚌 巴士",
+            title: "仙台站搭高速巴士前往山形（免預約，約 1 小時 15 分鐘）",
+            note: "班次極為頻密（約 15-20 分鐘一班），可直接使用交通 IC 卡拍卡上車。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "仙台駅前 高速バス乗り場"
+          },
+          {
+            time: "散策路線",
+            category: "🍁 復古",
+            title: "紅之藏 ➡️ 紅葉公園拍照 ➡️ 七日町御殿堰及周邊小店 ➡️ 文翔館（參觀洋館）",
+            note: "沿山形市區復古散步路線慢行，文翔館（舊縣廳舍）免費參觀且極具大正浪漫氣息。",
+            stamp: "打卡",
+            stampColor: "matcha",
+            mapQuery: "山形県郷土館 文翔館"
+          },
+          {
+            time: "傍晚",
+            category: "🛍️ 手信",
+            title: "山形車站 S-PAL 買伴手禮",
+            note: "選購山形名產櫻桃果凍、毛豆麻糬、米澤牛零食及清酒。",
+            stamp: "必買",
+            stampColor: "pink",
+            mapQuery: "S-PAL山形"
+          },
+          {
+            time: "晚餐",
+            category: "🥩 美食",
+            title: "米澤牛登起波 山形店 (Shabu-shabu)",
+            note: "創業逾百年的米澤牛老字號，品嚐頂級霜降米澤牛涮涮鍋！",
+            stamp: "必吃",
+            stampColor: "pink",
+            mapQuery: "米沢牛登起波 山形店"
+          },
+          {
+            time: "回程",
+            category: "🚌 巴士",
+            title: "搭高速巴士回仙台",
+            note: "於山形站前搭乘高速巴士返回仙台市區，整理行李準備翌日回程。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "山形駅前バスターミナル"
+          }
+        ]
+      },
+      {
+        day: 8,
+        date: "12/✱✱ (六)",
+        shortDate: "12/✱✱",
+        title: "賦歸・仙台最後採購",
+        weather: "🌤️ 仙台 2°C~9°C",
+        items: [
+          {
+            time: "上午",
+            category: "🛍️ 補貨",
+            title: "仙台站周邊最後補貨 / 退房",
+            note: "早餐後可於仙台站 S-PAL 或車站伴手禮區購入毛豆奶昔（ずんだシェイク）及萩之月。",
+            stamp: "手信",
+            stampColor: "brown",
+            mapQuery: "仙台駅 お土産"
+          },
+          {
+            time: "11:50 - 12:17 或 12:10 - 12:38",
+            category: "🚆 鐵路",
+            title: "仙台 ➡️ 仙台機場",
+            note: "搭乘仙台機場Access線前往機場，建議最遲 12:38 班次抵達辦理國際線報到。",
+            stamp: "交通",
+            stampColor: "matcha",
+            mapQuery: "仙台空港駅"
+          },
+          {
+            time: "15:00 - 19:40",
+            category: "✈️ 航班",
+            title: "乘搭 HK Express (UO ✱✱✱) 仙台飛往香港",
+            note: "滿載美好回憶平安返抵香港！",
+            stamp: "回程",
+            stampColor: "pink",
+            mapQuery: "仙台空港 国際線"
+          }
+        ]
+      }
+    ];
+
+    // ==================== 渲染每日行程與頂部頁籤 ====================
+    const dayTabsContainer = document.getElementById("dayTabsContainer");
+    const itineraryContainer = document.getElementById("itineraryContainer");
+
+    TRIP_DAYS.forEach((d, idx) => {
+      // 建立頂部橫向頁籤按鈕
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "day-tab-btn" + (idx === 0 ? " active" : "");
+      btn.dataset.day = d.day;
+      btn.innerHTML = `<span class="d-num">Day ${d.day}</span><span class="d-date">${d.shortDate}</span>`;
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".day-tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const targetEl = document.getElementById(`day-sec-${d.day}`);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+      dayTabsContainer.appendChild(btn);
+
+      // 建立每日行程區塊
+      const section = document.createElement("section");
+      section.className = "day-section";
+      section.id = `day-sec-${d.day}`;
+      section.dataset.day = d.day;
+
+      let cardsHtml = d.items.map(item => {
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.mapQuery)}`;
+        const bookedBadge = item.booked ? `<span class="booked-tag">已預訂</span>` : "";
+        return `
+          <article class="spot-card">
+            <div class="washi-tape"></div>
+            <div class="jp-stamp ${item.stampColor || ''}">${item.stamp}</div>
+            <div class="card-meta-row">
+              <span class="time-pill">🕒 ${item.time}</span>
+              <span class="cat-tag ${item.stampColor === 'pink' ? 'pink' : ''}">${item.category}</span>
+              ${bookedBadge}
+            </div>
+            <h3 class="spot-title">${item.title}</h3>
+            <p class="spot-note">💡 ${item.note}</p>
+            <div class="card-actions">
+              <a class="maps-btn" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">📍 Google Maps 導航</a>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      section.innerHTML = `
+        <div class="day-banner">
+          <div class="day-banner-left">
+            <span class="day-banner-date">DAY ${d.day} ・ ${d.date}</span>
+            <span class="day-banner-title">${d.title}</span>
+          </div>
+          <span class="day-weather-pill">${d.weather}</span>
+        </div>
+        ${cardsHtml}
+      `;
+      itineraryContainer.appendChild(section);
+    });
+
+    // 捲動時自動同步亮起頂部 Day 頁籤
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const dayNum = entry.target.dataset.day;
+          document.querySelectorAll(".day-tab-btn").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.day === dayNum);
+          });
+          const activeBtn = document.querySelector(`.day-tab-btn[data-day="${dayNum}"]`);
+          if (activeBtn) {
+            activeBtn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+          }
+        }
+      });
+    }, { rootMargin: "-20% 0px -65% 0px" });
+
+    document.querySelectorAll(".day-section").forEach(sec => observer.observe(sec));
+
+    // ==================== 底部導覽列切換 ====================
+    document.querySelectorAll(".nav-item").forEach(navBtn => {
+      navBtn.addEventListener("click", () => {
+        const targetId = navBtn.dataset.target;
+        document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
+        navBtn.classList.add("active");
+        document.querySelectorAll(".tab-page").forEach(page => {
+          page.classList.toggle("active", page.id === targetId);
+        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+
+    // ==================== LocalStorage 前綴：sendai26 ====================
+    const STORAGE_KEYS = {
+      rates: "sendai26.rates",
+      expenses: "sendai26.expenses",
+      checks: "sendai26.checks"
+    };
+
+    // ==================== 匯率換算與記帳功能 ====================
+    const rateTwdInput = document.getElementById("rateTwd");
+    const rateHkdInput = document.getElementById("rateHkd");
+    const calcJpyInput = document.getElementById("calcJpy");
+    const resTwdEl = document.getElementById("resTwd");
+    const resHkdEl = document.getElementById("resHkd");
+
+    const savedRates = JSON.parse(localStorage.getItem(STORAGE_KEYS.rates) || '{"twd":0.215,"hkd":0.052}');
+    rateTwdInput.value = savedRates.twd;
+    rateHkdInput.value = savedRates.hkd;
+
+    function updateConverter() {
+      const twdRate = parseFloat(rateTwdInput.value) || 0;
+      const hkdRate = parseFloat(rateHkdInput.value) || 0;
+      const jpy = parseFloat(calcJpyInput.value) || 0;
+
+      localStorage.setItem(STORAGE_KEYS.rates, JSON.stringify({ twd: twdRate, hkd: hkdRate }));
+      resTwdEl.textContent = `NT$ ${Math.round(jpy * twdRate).toLocaleString()}`;
+      resHkdEl.textContent = `HK$ ${(jpy * hkdRate).toFixed(1)}`;
+      renderExpenses();
+    }
+
+    rateTwdInput.addEventListener("input", updateConverter);
+    rateHkdInput.addEventListener("input", updateConverter);
+    calcJpyInput.addEventListener("input", updateConverter);
+
+    let expenses = JSON.parse(localStorage.getItem(STORAGE_KEYS.expenses) || "[]");
+    const expenseListEl = document.getElementById("expenseList");
+    const totalExpenseDisplay = document.getElementById("totalExpenseDisplay");
+
+    function renderExpenses() {
+      const twdRate = parseFloat(rateTwdInput.value) || 0;
+      const hkdRate = parseFloat(rateHkdInput.value) || 0;
+      let totalJpy = 0;
+
+      if (expenses.length === 0) {
+        expenseListEl.innerHTML = `<li style="text-align:center;color:#8A6B5C;padding:14px 0;font-size:0.85rem;">尚未有消費紀錄，快記下第一筆吧 ✍️</li>`;
+      } else {
+        expenseListEl.innerHTML = expenses.map((exp, idx) => {
+          totalJpy += exp.amount;
+          const hkd = (exp.amount * hkdRate).toFixed(1);
+          const twd = Math.round(exp.amount * twdRate);
+          return `
+            <li class="expense-item">
+              <div class="exp-info">
+                <span class="exp-name">${exp.title}</span>
+                <span class="exp-sub">${exp.day} ・ ${exp.cat}</span>
+              </div>
+              <div class="exp-right">
+                <div>
+                  <div class="exp-jpy">¥${exp.amount.toLocaleString()}</div>
+                  <div class="exp-conv">HK$${hkd} / NT$${twd}</div>
+                </div>
+                <button type="button" class="del-btn" data-idx="${idx}" title="刪除">×</button>
+              </div>
+            </li>
+          `;
+        }).join("");
+      }
+
+      const totalHkd = (totalJpy * hkdRate).toFixed(1);
+      const totalTwd = Math.round(totalJpy * twdRate).toLocaleString();
+      totalExpenseDisplay.textContent = `¥${totalJpy.toLocaleString()} (HK$${totalHkd} / NT$${totalTwd})`;
+
+      document.querySelectorAll(".del-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const idx = parseInt(btn.dataset.idx, 10);
+          expenses.splice(idx, 1);
+          localStorage.setItem(STORAGE_KEYS.expenses, JSON.stringify(expenses));
+          renderExpenses();
+        });
+      });
+    }
+
+    document.getElementById("addExpenseBtn").addEventListener("click", () => {
+      const day = document.getElementById("expDay").value;
+      const cat = document.getElementById("expCat").value;
+      const title = document.getElementById("expTitle").value.trim();
+      const amount = parseFloat(document.getElementById("expAmount").value);
+
+      if (!title || isNaN(amount) || amount <= 0) {
+        alert("請輸入消費項目名稱與有效日幣金額！");
+        return;
+      }
+
+      expenses.unshift({ day, cat, title, amount });
+      localStorage.setItem(STORAGE_KEYS.expenses, JSON.stringify(expenses));
+      document.getElementById("expTitle").value = "";
+      document.getElementById("expAmount").value = "";
+      renderExpenses();
+    });
+
+    renderExpenses();
+
+    // ==================== 行前清單 CheckList 功能 ====================
+    const DEFAULT_CHECKS = [
+      { id: "c1", cat: "📄 證件與票券", text: "護照（有效期 6 個月以上）", done: false },
+      { id: "c2", cat: "📄 證件與票券", text: "Visit Japan Web QR Code 截圖", done: false },
+      { id: "c3", cat: "📄 證件與票券", text: "HK Express 機票確認單 (UO ✱✱✱ / UO ✱✱✱)", done: false },
+      { id: "c4", cat: "📄 證件與票券", text: "JR Pass 兌換憑證 & 新幹線預訂確認", done: false },
+      { id: "c5", cat: "📄 證件與票券", text: "JR 巴士「八甲田號」預約確認單", done: false },
+      { id: "c6", cat: "📄 證件與票券", text: "呼炉来居酒屋預約確認 + 旅遊保險單", done: false },
+      { id: "c7", cat: "🧥 初冬防寒與防滑裝備", text: "防水防滑深紋雪靴（青森/八甲田山必備）", done: false },
+      { id: "c8", cat: "🧥 初冬防寒與防滑裝備", text: "防風羽絨外套（洋蔥式穿搭外層）", done: false },
+      { id: "c9", cat: "🧥 初冬防寒與防滑裝備", text: "發熱內衣、毛衣 / Fleece 中層", done: false },
+      { id: "c10", cat: "🧥 初冬防寒與防滑裝備", text: "遮耳冷帽、頸巾、防風觸控手套", done: false },
+      { id: "c11", cat: "🧥 初冬防寒與防滑裝備", text: "暖包（貼式＋手握式）及潤唇膏/保濕霜", done: false },
+      { id: "c12", cat: "🔌 電子與隨身物品", text: "日本上網 SIM 卡 / eSIM / Wi-Fi 蛋", done: false },
+      { id: "c13", cat: "🔌 電子與隨身物品", text: "行動電源（低溫耗電快，務必隨身攜帶）", done: false },
+      { id: "c14", cat: "🔌 電子與隨身物品", text: "日圓現金、海外簽賬信用卡、Suica / ICOCA", done: false },
+      { id: "c15", cat: "🔌 電子與隨身物品", text: "摺疊晴雨傘、常用個人藥物", done: false }
+    ];
+
+    let checkItems = JSON.parse(localStorage.getItem(STORAGE_KEYS.checks) || "null");
+    if (!checkItems || !Array.isArray(checkItems)) {
+      checkItems = DEFAULT_CHECKS;
+      localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(checkItems));
+    }
+
+    const checklistContainer = document.getElementById("checklistContainer");
+    const checkProgressText = document.getElementById("checkProgressText");
+    const checkProgressFill = document.getElementById("checkProgressFill");
+
+    function renderChecklist() {
+      const groups = {};
+      checkItems.forEach(item => {
+        if (!groups[item.cat]) groups[item.cat] = [];
+        groups[item.cat].push(item);
+      });
+
+      checklistContainer.innerHTML = Object.keys(groups).map(cat => {
+        const itemsHtml = groups[cat].map(item => `
+          <label class="check-item ${item.done ? 'checked' : ''}">
+            <div class="check-left">
+              <input type="checkbox" data-id="${item.id}" ${item.done ? 'checked' : ''}>
+              <span class="item-text">${item.text}</span>
+            </div>
+          </label>
+        `).join("");
+        return `<div class="check-cat-title">${cat}</div>${itemsHtml}`;
+      }).join("");
+
+      const total = checkItems.length;
+      const doneCount = checkItems.filter(i => i.done).length;
+      const pct = total === 0 ? 0 : Math.round((doneCount / total) * 100);
+      checkProgressText.textContent = `${doneCount} / ${total} 完成 (${pct}%)`;
+      checkProgressFill.style.width = `${pct}%`;
+
+      checklistContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener("change", () => {
+          const target = checkItems.find(i => i.id === cb.dataset.id);
+          if (target) {
+            target.done = cb.checked;
+            localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(checkItems));
+            renderChecklist();
+          }
+        });
+      });
+    }
+
+    document.getElementById("addCheckBtn").addEventListener("click", () => {
+      const input = document.getElementById("newCheckInput");
+      const text = input.value.trim();
+      if (!text) return;
+      checkItems.push({
+        id: "custom_" + Date.now(),
+        cat: "✨ 自訂清單",
+        text,
+        done: false
+      });
+      localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(checkItems));
+      input.value = "";
+      renderChecklist();
+    });
+
+    renderChecklist();
+  </script>
+</body>
+</html>
