@@ -206,9 +206,14 @@ Add a back link so the trip page can return:
 | `travel.notebook.prompt.v1` | Your edited generation prompt |
 | `travel.notebook.names.v1` | Trip name → filename memory |
 | `travel.notebook.terms.v1` | Extra redaction terms typed into the publish panel (this device only) |
+| `travel.notebook.hidden.v1` | Trip filenames hidden with the card's 移除 button (this device only) |
 | `tohoku26.rates` / `.expenses` / `.checks` | Exchange rates, expenses and checklist |
 
-Clearing site data removes custom cards; the HTML files themselves are untouched.
+Clearing site data removes custom cards and un-hides hidden ones; the HTML files themselves are untouched.
+
+### Removing a trip from the site
+
+Every card has a 移除 button. It always hides the card on the current device first (reversible with the 還原已隱藏 button). If a GitHub token is currently typed into the publish panel, published trips are also removed from `docs/trips.json` and their `docs/<file>.html` page is deleted. Built-in trips can only be hidden locally. The token is never stored, so it must be pasted again for each online removal.
 
 ## License
 

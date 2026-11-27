@@ -245,6 +245,13 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
   padding:0;
 }
 .trip-del:active{color:var(--pink-deep)}
+.trip-del:hover{color:var(--pink-deep)}
+.restore-btn{
+  border:1px dashed rgba(92,64,51,.25);background:rgba(250,246,236,.7);
+  color:var(--ink-soft);border-radius:99px;padding:6px 12px;
+  font-size:10.5px;font-weight:700;white-space:nowrap;
+}
+.restore-btn:hover{color:var(--ink);border-color:rgba(92,64,51,.45)}
 .open-btn{
   flex:0 0 auto;
   display:inline-flex;align-items:center;gap:6px;
@@ -565,6 +572,7 @@ body.modal-open{overflow:hidden}
       <div class="section-kicker">TRAVEL FILES</div>
       <h2>旅程一覽 <span class="count" id="tripCount">1</span></h2>
     </div>
+    <button type="button" class="restore-btn" id="restoreTrips" hidden>↩ 還原已隱藏 (<span id="hiddenCount">0</span>)</button>
     <button type="button" class="add-mini" id="addTripTop">＋ 新增旅程</button>
   </div>
 
@@ -579,6 +587,7 @@ body.modal-open{overflow:hidden}
       <li>貼到「② 貼上完成的 HTML」，按「儲存 HTML 並加入手帳」。</li>
     </ol>
     <p>首頁會自動讀取檔案裡的 <strong>trip:</strong> meta 標籤（名稱、日期、emoji），存檔後卡片立即出現。沒有 meta 也能用「＋ 新增旅程」手動登記；換裝置或清除瀏覽資料後，自訂卡片需要重新加入。</p>
+    <p>每張卡片的「移除」會先在本機隱藏（可用上方的「還原已隱藏」挽回）。若在下方貼上 GitHub token，已發布的旅程會同時從 <strong>trips.json</strong> 和 <strong>docs/</strong> 刪除；內建旅程只能在本機隱藏。</p>
   </section>
 
   <section class="studio">
@@ -623,7 +632,7 @@ body.modal-open{overflow:hidden}
 
     <details class="publish" id="publishBox">
       <summary>發布到網站（GitHub）</summary>
-      <p class="publish-note">沒有電腦專案資料夾時用這個：會先在這個分頁遮蔽日期、航班與你填的私人字詞，再直接寫入 <strong>docs/</strong>。需要一組只限 <strong>travel-eye</strong> 的 fine-grained token（Contents: Read and write）。Token 只留在這個分頁，不會儲存。</p>
+      <p class="publish-note">沒有電腦專案資料夾時用這個：會先在這個分頁遮蔽日期、航班與你填的私人字詞，再直接寫入 <strong>docs/</strong>。需要一組只限 <strong>travel-eye</strong> 的 fine-grained token（Contents: Read and write）。Token 只留在這個分頁，不會儲存；卡片上的「移除」也會使用這裡輸入的 token。</p>
       <div class="publish-field">
         <label for="ghToken">GitHub token</label>
         <input id="ghToken" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
@@ -799,6 +808,7 @@ body.modal-open{overflow:hidden}
 
   /* ================= 旅程資料 ================= */
   const STORE_KEY = 'travel.notebook.trips.v1';
+  const HIDDEN_KEY = 'travel.notebook.hidden.v1';
   const THEMES = ['pink', 'matcha', 'tan'];
   const BUILTIN_TRIPS = [
     /* >>> AUTO-TRIPS (managed by tools/publish.mjs; do not edit by hand) */
@@ -825,6 +835,29 @@ body.modal-open{overflow:hidden}
   if (!Array.isArray(customTrips)) customTrips = [];
 
   let publishedTrips = [];
+
+  /* Hidden cards are stored by filename so a card keeps its hidden state
+     whether it came from trips.json, the built-in list or localStorage. */
+  function tripKey(trip){
+    const href = String((trip && trip.href) || '').trim().toLowerCase().replace(/^\.\//, '');
+    return href || String((trip && trip.id) || '').toLowerCase();
+  }
+
+  let hiddenTrips = LS.get(HIDDEN_KEY, []);
+  if (!Array.isArray(hiddenTrips)) hiddenTrips = [];
+  hiddenTrips = hiddenTrips.filter((key) => typeof key === 'string' && key);
+  LS.set(HIDDEN_KEY, hiddenTrips);
+
+  function saveHiddenTrips(){
+    LS.set(HIDDEN_KEY, hiddenTrips);
+  }
+
+  function findTripByHref(href){
+    const target = String(href || '').toLowerCase();
+    return BUILTIN_TRIPS.concat(publishedTrips, customTrips).find(function(item){
+      return String(item.href || '').toLowerCase() === target;
+    }) || null;
+  }
 
   function normalizeTrip(trip){
     if (!trip || typeof trip !== 'object') return null;
@@ -874,6 +907,7 @@ body.modal-open{overflow:hidden}
       const key = String(trip.href || '').toLowerCase();
       if (key && seen[key]) return;
       if (key) seen[key] = true;
+      if (hiddenTrips.indexOf(tripKey(trip)) > -1) return;
       merged.push(trip);
     });
     return merged.sort(function(a, b){
@@ -904,6 +938,14 @@ body.modal-open{overflow:hidden}
   const tripCountEl = $('#tripCount');
   const statTripsEl = $('#statTrips');
   const statDaysEl = $('#statDays');
+  const restoreBtn = $('#restoreTrips');
+  const hiddenCountEl = $('#hiddenCount');
+
+  function syncRestoreButton(){
+    if (!restoreBtn) return;
+    restoreBtn.hidden = hiddenTrips.length === 0;
+    if (hiddenCountEl) hiddenCountEl.textContent = String(hiddenTrips.length);
+  }
 
   function tripCardHTML(trip){
     const status = statusOf(trip);
@@ -931,7 +973,7 @@ body.modal-open{overflow:hidden}
           '<div class="trip-foot">' +
             '<div class="trip-foot-left">' +
               '<span class="trip-meta">' + trip.days + ' 天 ' + trip.nights + ' 夜</span>' +
-              (trip.custom ? '<button type="button" class="trip-del" data-del="' + esc(trip.id) + '">移除</button>' : '') +
+              '<button type="button" class="trip-del" data-del="' + esc(trip.href) + '">移除</button>' +
             '</div>' +
             '<a class="open-btn" href="' + esc(trip.href) + '">打開手帳 <span aria-hidden="true">→</span></a>' +
           '</div>' +
@@ -958,6 +1000,7 @@ body.modal-open{overflow:hidden}
     const thisYear = new Date().getFullYear();
     const displayYear = years.length ? Math.max(thisYear, Math.max.apply(null, years)) : thisYear;
     $('#heroYear').textContent = String(displayYear);
+    syncRestoreButton();
   }
 
   /* ================= modal ================= */
@@ -1058,15 +1101,42 @@ body.modal-open{overflow:hidden}
 
     const delBtn = event.target.closest('[data-del]');
     if (!delBtn) return;
-    const trip = customTrips.find((item) => item.id === delBtn.dataset.del);
+    const trip = findTripByHref(delBtn.dataset.del);
     if (!trip) return;
-    const ok = window.confirm('移除「' + trip.title + '」？\n只會移除首頁卡片，不會刪除 HTML 檔案。');
-    if (!ok) return;
-    customTrips = customTrips.filter((item) => item.id !== trip.id);
-    saveCustomTrips();
+
+    const token = String((ghTokenInput && ghTokenInput.value) || '').trim();
+    const isBuiltin = BUILTIN_TRIPS.some(function(item){
+      return String(item.href || '').toLowerCase() === String(trip.href || '').toLowerCase();
+    });
+    const canRemoveOnline = !!token && !isBuiltin;
+    const message = canRemoveOnline
+      ? '移除「' + trip.title + '」？\n\n先從這台裝置隱藏，再嘗試從網站刪除卡片與 HTML 頁面（使用下面輸入的 GitHub token）。'
+      : '移除「' + trip.title + '」？\n\n只會從這台裝置隱藏卡片，不會刪除網站上的 HTML 檔案，也不會影響其他人看到的內容。' +
+        (isBuiltin ? '\n\n這是網站內建旅程，只能在本機隱藏。' : '\n\n如要連網站一起刪除，請在下方「發布到網站」貼上 GitHub token。');
+    if (!window.confirm(message)) return;
+
+    const key = tripKey(trip);
+    if (hiddenTrips.indexOf(key) === -1) hiddenTrips.push(key);
+    saveHiddenTrips();
     render();
-    showToast('已從手帳移除');
+    if (canRemoveOnline) {
+      showToast('已隱藏，正在從 GitHub 移除…');
+      removeTripOnline(trip, token);
+    } else {
+      showToast('已從這台裝置隱藏');
+    }
   });
+
+  if (restoreBtn) {
+    restoreBtn.addEventListener('click', function(){
+      const ok = window.confirm('還原所有已隱藏的旅程卡片？\n已從網站刪除的 HTML 頁面不會自動回來。');
+      if (!ok) return;
+      hiddenTrips = [];
+      saveHiddenTrips();
+      render();
+      showToast('已還原隱藏的旅程');
+    });
+  }
 
   $$('[data-close]').forEach((el) => {
     el.addEventListener('click', closeModal);
@@ -1702,6 +1772,77 @@ body.modal-open{overflow:hidden}
     await ghApi('/contents/docs/trips.json', { method: 'PUT', body: JSON.stringify(body) }, token);
   }
 
+  function ghErrorHint(err){
+    const hint = err.status === 401 ? '（token 無效或已過期）'
+      : err.status === 403 ? '（token 權限不足，需要 Contents: Read and write）'
+      : err.status === 409 ? '（檔案剛好被改動，請再按一次）'
+      : '';
+    return (err.message || 'HTTP error') + hint;
+  }
+
+  async function ghDeleteFile(pathValue, token){
+    const encoded = encodePath(pathValue);
+    let sha = null;
+    try {
+      const current = await ghApi('/contents/' + encoded + '?ref=' + GH_BRANCH, {}, token);
+      sha = current && current.sha;
+    } catch (err) {
+      if (err.status === 404) return;
+      throw err;
+    }
+    if (!sha) return;
+    await ghApi('/contents/' + encoded, {
+      method: 'DELETE',
+      body: JSON.stringify({ message: 'Remove trip page: ' + pathValue, sha: sha, branch: GH_BRANCH })
+    }, token);
+  }
+
+  async function removeFromTripIndex(href, token){
+    let list = [];
+    let sha = null;
+    try {
+      const current = await ghApi('/contents/docs/trips.json?ref=' + GH_BRANCH, {}, token);
+      sha = current.sha;
+      const parsed = JSON.parse(fromBase64(current.content) || '[]');
+      if (Array.isArray(parsed)) list = parsed;
+    } catch (err) {
+      if (err.status !== 404) throw err;
+    }
+    const next = list.filter(function(item){
+      return String((item && item.href) || '').toLowerCase() !== href.toLowerCase();
+    });
+    if (!next.length && !list.length && !sha) return;
+    const body = {
+      message: 'Remove trip: ' + href,
+      content: toBase64(JSON.stringify(next, null, 2) + '\n'),
+      branch: GH_BRANCH
+    };
+    if (sha) body.sha = sha;
+    await ghApi('/contents/docs/trips.json', { method: 'PUT', body: JSON.stringify(body) }, token);
+  }
+
+  async function removeTripOnline(trip, token){
+    const href = safeHref(trip.href);
+    if (!href) {
+      showToast('已隱藏；檔名不安全，略過 GitHub 刪除');
+      return;
+    }
+    try {
+      await removeFromTripIndex(href, token);
+    } catch (err) {
+      showToast('已隱藏；索引刪除失敗：' + ghErrorHint(err));
+      return;
+    }
+    try {
+      await ghDeleteFile('docs/' + href, token);
+      showToast('已從網站移除「' + trip.title + '」');
+    } catch (err) {
+      showToast(err.status === 404
+        ? '已從索引移除；頁面原本就不在網站上'
+        : '已從索引移除；頁面刪除失敗：' + ghErrorHint(err));
+    }
+  }
+
   function setPublishStatus(kind, message){
     if (!publishStatus) return;
     publishStatus.hidden = false;
@@ -1789,11 +1930,7 @@ body.modal-open{overflow:hidden}
       setPublishStatus('ok', '已發布「' + parsed.meta.title + '」。GitHub Pages 約 1 分鐘後更新：' + site + href);
       showToast('旅程已發布到網站');
     } catch (err) {
-      const hint = err.status === 401 ? '（token 無效或已過期）'
-        : err.status === 403 ? '（token 權限不足，需要 Contents: Read and write）'
-        : err.status === 409 ? '（檔案剛好被改動，請再按一次）'
-        : '';
-      setPublishStatus('bad', '發布失敗：' + err.message + hint);
+      setPublishStatus('bad', '發布失敗：' + ghErrorHint(err));
       publishBtn.disabled = false;
     } finally {
       publishBtn.textContent = label;

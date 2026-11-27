@@ -228,11 +228,14 @@ If `/` returns Vercel's 404, the project is serving the repo root. Check `vercel
 | `travel.notebook.prompt.v1` | landing | Edited generation prompt |
 | `travel.notebook.names.v1` | landing | Trip name → filename |
 | `travel.notebook.terms.v1` | landing | Extra redaction terms from the publish panel |
+| `travel.notebook.hidden.v1` | landing | Trips hidden by the 移除 button, keyed by filename |
 | `tohoku26.rates` | trip | Exchange rate |
 | `tohoku26.expenses` | trip | Expense log |
 | `tohoku26.checks` | trip | Checklist state |
 
 Storage is per origin: the local file, GitHub Pages and Vercel each have separate data.
+
+Card 移除 hides by lowercase `href` in `travel.notebook.hidden.v1`; 還原已隱藏 clears it. With a token typed into the publish panel (not persisted), published trips are also removed from `docs/trips.json` (PUT) and `docs/<href>` (DELETE) through the GitHub Contents API. Built-in trips are local-hide only.
 
 ---
 
